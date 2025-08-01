@@ -6,4 +6,7 @@
   <Folder Name="/tests/" Id="56479f4c-43bd-4a46-bea9-8f4c205f8baf">
     <Project Path="tests/CloakId.Tests/CloakId.Tests.csproj" Id="903f822c-8c6b-447e-bb1a-8bdde25a971d" />
   </Folder>
+  <Folder Name="/benchmarks/" Id="7f2e9a81-4b3c-4d5e-8f6a-9b0c1d2e3f4g">
+    <Project Path="benchmarks/CloakId.Benchmarks/CloakId.Benchmarks.csproj" />
+  </Folder>
 </Solution>

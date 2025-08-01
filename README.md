@@ -179,6 +179,43 @@ Instead of exposing the raw numeric values:
 
 Notice how only the properties marked with `[CloakId]` are encoded, while `RegularId` remains as a number.
 
+## Performance
+
+CloakId is designed for performance with minimal overhead. You can run comprehensive benchmarks to see the performance characteristics:
+
+### Running Benchmarks
+
+```bash
+# Run all benchmarks
+./run-benchmarks.ps1
+
+# Run only encoding/decoding benchmarks
+./run-benchmarks.ps1 "*Encode*"
+
+# Run only JSON serialization benchmarks  
+./run-benchmarks.ps1 "*Json*"
+
+# Run only happy path tests
+./run-benchmarks.ps1 "*HappyPath*"
+
+# Run only error handling tests
+./run-benchmarks.ps1 "*SadPath*"
+
+# Quick validation run
+./run-benchmarks.ps1 "*" --dry
+```
+
+### Sample Results
+
+Based on benchmarks, typical performance characteristics:
+
+- **Encoding**: ~4 microseconds per int32 value
+- **JSON Serialization**: ~40 microseconds for small models
+- **Memory allocation**: ~21KB allocated per serialization of typical models
+- **Error handling**: Fast exception handling for invalid data
+
+See `/benchmarks/README.md` for detailed benchmark information.
+
 ## Benefits
 
 1. **Security**: Internal numeric IDs are not exposed in API responses
