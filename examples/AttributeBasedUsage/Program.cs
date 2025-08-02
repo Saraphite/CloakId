@@ -6,7 +6,16 @@ using System.Text.Json;
 
 // Example usage showing the new attribute-based approach
 
-// Set up dependency injection
+Console.WriteLine("Testing CloakIdOptions Validation");
+Console.WriteLine("==================================");
+
+// Test validation examples
+TestValidation();
+
+Console.WriteLine("\nNow testing normal functionality with valid options...");
+Console.WriteLine("=====================================================");
+
+// Set up dependency injection with valid options
 var services = new ServiceCollection();
 services.AddCloakIdWithSqids(options =>
 {
@@ -17,6 +26,71 @@ services.AddCloakIdWithSqids(options =>
 services.AddCloakId(); // Add the type info resolver
 
 var serviceProvider = services.BuildServiceProvider();
+
+static void TestValidation()
+{
+    Console.WriteLine("Testing MinLength validation:");
+    try
+    {
+        var options1 = new CloakIdOptions { MinLength = 5 };
+        Console.WriteLine($"  ✓ Valid MinLength = {options1.MinLength}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"  ✗ Error: {ex.Message}");
+    }
+
+    try
+    {
+        var options2 = new CloakIdOptions { MinLength = -1 };
+        Console.WriteLine($"  ✓ Invalid MinLength accepted: {options2.MinLength}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"  ✓ Validation caught invalid MinLength: {ex.Message}");
+    }
+
+    Console.WriteLine("\nTesting Alphabet validation:");
+    try
+    {
+        var options3 = new CloakIdOptions { Alphabet = "abcdefghijklmnopqrstuvwxyz" };
+        Console.WriteLine($"  ✓ Valid alphabet accepted");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"  ✗ Error with valid alphabet: {ex.Message}");
+    }
+
+    try
+    {
+        var options4 = new CloakIdOptions { Alphabet = "ab" };
+        Console.WriteLine($"  ✗ Short alphabet accepted");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"  ✓ Validation caught short alphabet: {ex.Message}");
+    }
+
+    try
+    {
+        var options5 = new CloakIdOptions { Alphabet = "aab" };
+        Console.WriteLine($"  ✗ Duplicate characters accepted");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"  ✓ Validation caught duplicates: {ex.Message}");
+    }
+
+    try
+    {
+        var options6 = new CloakIdOptions { Alphabet = "ab c" };
+        Console.WriteLine($"  ✗ Whitespace characters accepted");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"  ✓ Validation caught whitespace: {ex.Message}");
+    }
+}
 
 // Get the type info resolver
 var typeInfoResolver = serviceProvider.GetRequiredService<CloakIdTypeInfoResolver>();
