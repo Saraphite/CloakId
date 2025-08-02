@@ -8,7 +8,12 @@ using System.Text.Json;
 
 // Set up dependency injection
 var services = new ServiceCollection();
-services.AddCloakIdWithSqids(minLength: 6); // Configure Sqids encoding
+services.AddCloakIdWithSqids(options =>
+{
+    options.MinLength = 6; // Configure minimum length
+    // You can also set a custom alphabet:
+    // options.Alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+});
 services.AddCloakId(); // Add the type info resolver
 
 var serviceProvider = services.BuildServiceProvider();

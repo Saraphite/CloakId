@@ -10,73 +10,75 @@ public static class ServiceCollectionExtensions
     /// Adds CloakId services with Sqids encoding to the service collection.
     /// </summary>
     /// <param name="services">The service collection to add services to.</param>
-    /// <param name="alphabet">Optional custom alphabet for Sqids. If null, default alphabet will be used.</param>
-    /// <param name="minLength">Minimum length of generated IDs.</param>
+    /// <param name="configureOptions">Optional action to configure CloakId options.</param>
     /// <returns>The updated service collection.</returns>
     public static IServiceCollection AddCloakIdWithSqids(
         this IServiceCollection services,
-        string? alphabet = null,
-        int minLength = 0)
+        Action<CloakIdOptions>? configureOptions = null)
     {
+        // Configure options
+        var options = new CloakIdOptions();
+        configureOptions?.Invoke(options);
+
         // Register Sqids encoders for different numeric types
         services.AddSingleton(provider =>
         {
-            var options = new SqidsOptions
+            var sqidsOptions = new SqidsOptions
             {
-                MinLength = minLength
+                MinLength = options.MinLength
             };
-            if (alphabet != null) options.Alphabet = alphabet;
-            return new SqidsEncoder<int>(options);
+            if (options.Alphabet != null) sqidsOptions.Alphabet = options.Alphabet;
+            return new SqidsEncoder<int>(sqidsOptions);
         });
 
         services.AddSingleton(provider =>
         {
-            var options = new SqidsOptions
+            var sqidsOptions = new SqidsOptions
             {
-                MinLength = minLength
+                MinLength = options.MinLength
             };
-            if (alphabet != null) options.Alphabet = alphabet;
-            return new SqidsEncoder<uint>(options);
+            if (options.Alphabet != null) sqidsOptions.Alphabet = options.Alphabet;
+            return new SqidsEncoder<uint>(sqidsOptions);
         });
 
         services.AddSingleton(provider =>
         {
-            var options = new SqidsOptions
+            var sqidsOptions = new SqidsOptions
             {
-                MinLength = minLength
+                MinLength = options.MinLength
             };
-            if (alphabet != null) options.Alphabet = alphabet;
-            return new SqidsEncoder<long>(options);
+            if (options.Alphabet != null) sqidsOptions.Alphabet = options.Alphabet;
+            return new SqidsEncoder<long>(sqidsOptions);
         });
 
         services.AddSingleton(provider =>
         {
-            var options = new SqidsOptions
+            var sqidsOptions = new SqidsOptions
             {
-                MinLength = minLength
+                MinLength = options.MinLength
             };
-            if (alphabet != null) options.Alphabet = alphabet;
-            return new SqidsEncoder<ulong>(options);
+            if (options.Alphabet != null) sqidsOptions.Alphabet = options.Alphabet;
+            return new SqidsEncoder<ulong>(sqidsOptions);
         });
 
         services.AddSingleton(provider =>
         {
-            var options = new SqidsOptions
+            var sqidsOptions = new SqidsOptions
             {
-                MinLength = minLength
+                MinLength = options.MinLength
             };
-            if (alphabet != null) options.Alphabet = alphabet;
-            return new SqidsEncoder<short>(options);
+            if (options.Alphabet != null) sqidsOptions.Alphabet = options.Alphabet;
+            return new SqidsEncoder<short>(sqidsOptions);
         });
 
         services.AddSingleton(provider =>
         {
-            var options = new SqidsOptions
+            var sqidsOptions = new SqidsOptions
             {
-                MinLength = minLength
+                MinLength = options.MinLength
             };
-            if (alphabet != null) options.Alphabet = alphabet;
-            return new SqidsEncoder<ushort>(options);
+            if (options.Alphabet != null) sqidsOptions.Alphabet = options.Alphabet;
+            return new SqidsEncoder<ushort>(sqidsOptions);
         });
 
         // Register the SqidsCodec as the ICloakIdCodec

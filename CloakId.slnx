@@ -10,4 +10,8 @@
   <Folder Name="/benchmarks/" Id="7f2e9a81-4b3c-4d5e-8f6a-9b0c1d2e3f4g">
     <Project Path="benchmarks/CloakId.Benchmarks/CloakId.Benchmarks.csproj" />
   </Folder>
+  <Folder Name="/examples/" Id="8a3f0b92-5d4e-6f7a-0b1c-2d3e4f5a6b7c">
+    <Project Path="examples/AttributeBasedUsage/AttributeBasedUsage.csproj" />
+    <Project Path="examples/WebApiExample/WebApiExample.csproj" />
+  </Folder>
 </Solution>
