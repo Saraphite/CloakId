@@ -10,7 +10,7 @@ public class CloakIdModelBinder(ICloakIdCodec codec) : IModelBinder
 {
     public Task BindModelAsync(ModelBindingContext bindingContext)
     {
-        if (bindingContext == null) throw new ArgumentNullException(nameof(bindingContext));
+        ArgumentNullException.ThrowIfNull(bindingContext);
 
         // Check if the property has the CloakId attribute
         var modelType = bindingContext.ModelType;

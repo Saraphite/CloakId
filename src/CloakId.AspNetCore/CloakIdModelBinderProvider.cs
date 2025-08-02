@@ -12,8 +12,7 @@ public class CloakIdModelBinderProvider : IModelBinderProvider
 {
     public IModelBinder? GetBinder(ModelBinderProviderContext context)
     {
-        if (context == null)
-            throw new ArgumentNullException(nameof(context));
+        ArgumentNullException.ThrowIfNull(context);
 
         var modelType = context.Metadata.ModelType;
         var underlyingType = Nullable.GetUnderlyingType(modelType) ?? modelType;
