@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/" Id="02ea681e-c7d8-13c7-8484-4ac65e1b71e8">
+    <Project Path="src/CloakId.AspNetCore/CloakId.AspNetCore.csproj" />
     <Project Path="src/CloakId.Sqids/CloakId.Sqids.csproj" />
     <Project Path="src/CloakId/CloakId.csproj" />
   </Folder>

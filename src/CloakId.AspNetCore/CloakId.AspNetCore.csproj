@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Description>ASP.NET Core integration for CloakId - includes model binding and OpenAPI/Swagger support for parameters marked with [CloakId] attribute</Description>
+    <Authors>CloakId Contributors</Authors>
+    <PackageTags>aspnetcore;model-binding;openapi;swagger;cloakid;mvc</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CloakId\CloakId.csproj" />
+  </ItemGroup>
+
+</Project>

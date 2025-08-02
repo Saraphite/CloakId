@@ -11,7 +11,7 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
 
     /// <summary>
     /// Example 1: Manual conversion approach
-    /// Route: GET api/users/manual/hdNBDj
+    /// Route: GET api/users/manual/rs (where "rs" is an encoded ID for user 33)
     /// </summary>
     [HttpGet("manual/{encodedId}")]
     public IActionResult GetUserManual(string encodedId)
@@ -34,7 +34,7 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
 
     /// <summary>
     /// Example 2: Automatic conversion with model binder
-    /// Route: GET api/users/auto/hdNBDj
+    /// Route: GET api/users/auto/rs (where "rs" is an encoded ID for user 33)
     /// The [CloakId] attribute tells the model binder to automatically convert the string
     /// </summary>
     [HttpGet("auto/{id}")]
@@ -50,7 +50,7 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
 
     /// <summary>
     /// Example 3: Multiple encoded parameters
-    /// Route: GET api/users/hdNBDj/posts/kPx9Qm
+    /// Route: GET api/users/rs/posts/PQ (where "rs" = user 33, "PQ" = post 20)
     /// </summary>
     [HttpGet("{userId}/posts/{postId}")]
     public IActionResult GetUserPost([CloakId] int userId, [CloakId] long postId)
@@ -67,7 +67,8 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
 
     /// <summary>
     /// Example 4: Fallback - works with both encoded strings and regular numbers
-    /// Route: GET api/users/fallback/hdNBDj or GET api/users/fallback/123
+    /// Route: GET api/users/fallback/rs or GET api/users/fallback/33
+    /// Note: Numeric values work because the model binder falls back to default parsing if decoding fails
     /// </summary>
     [HttpGet("fallback/{id}")]
     public IActionResult GetUserFallback([CloakId] int id)

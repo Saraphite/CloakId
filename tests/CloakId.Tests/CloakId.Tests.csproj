@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\CloakId\CloakId.csproj" />
     <ProjectReference Include="..\..\src\CloakId.Sqids\CloakId.Sqids.csproj" />
+    <ProjectReference Include="..\..\src\CloakId.AspNetCore\CloakId.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

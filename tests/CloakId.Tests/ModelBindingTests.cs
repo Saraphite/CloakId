@@ -1,4 +1,5 @@
 using CloakId.Abstractions;
+using CloakId.AspNetCore;
 using CloakId.Sqids;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
@@ -23,7 +24,7 @@ public class ModelBindingTests
     #region MvcBuilderExtensions Tests
 
     [Fact]
-    public void AddCloakIdModelBinding_RegistersModelBinderProvider()
+    public void AddCloakId_RegistersModelBinderProvider()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -42,7 +43,7 @@ public class ModelBindingTests
     }
 
     [Fact]
-    public void AddCloakIdModelBinding_ReturnsBuilderForChaining()
+    public void AddCloakId_ReturnsBuilderForChaining()
     {
         // Arrange
         var services = new ServiceCollection();

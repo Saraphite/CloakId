@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CloakId;
+namespace CloakId.AspNetCore;
 
 /// <summary>
 /// Extension methods for configuring CloakId model binding in ASP.NET Core.

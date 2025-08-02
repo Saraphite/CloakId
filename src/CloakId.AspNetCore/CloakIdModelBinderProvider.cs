@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CloakId;
+namespace CloakId.AspNetCore;
 
 /// <summary>
 /// Model binder provider that creates CloakIdModelBinder instances for numeric parameters.
