@@ -1,12 +1,13 @@
 using CloakId.Abstractions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Options;
 
 namespace CloakId.AspNetCore;
 
 /// <summary>
 /// Model binder for automatically converting encoded CloakId strings to their underlying numeric types.
 /// </summary>
-public class CloakIdModelBinder(ICloakIdCodec codec) : IModelBinder
+public class CloakIdModelBinder(ICloakIdCodec codec, IOptions<CloakIdOptions> options) : IModelBinder
 {
     public Task BindModelAsync(ModelBindingContext bindingContext)
     {
@@ -32,7 +33,17 @@ public class CloakIdModelBinder(ICloakIdCodec codec) : IModelBinder
         }
         catch (Exception)
         {
-            // If decoding fails, let the default model binder handle it
+            // Check if numeric fallback is allowed
+            if (!options.Value.AllowNumericFallback)
+            {
+                // If fallback is disabled, fail the binding with a clear error
+                bindingContext.Result = ModelBindingResult.Failed();
+                bindingContext.ModelState.TryAddModelError(bindingContext.ModelName, 
+                    $"Invalid encoded value '{stringValue}'. Numeric fallback is disabled.");
+                return Task.CompletedTask;
+            }
+            
+            // If decoding fails and fallback is allowed, let the default model binder handle it
             // This allows for backwards compatibility with numeric IDs
             return Task.CompletedTask;
         }

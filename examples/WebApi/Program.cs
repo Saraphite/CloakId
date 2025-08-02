@@ -11,7 +11,11 @@ builder.Services.AddCloakIdWithSqids(options =>
 });
 
 // Add controllers with CloakId ASP.NET Core integration (model binding)
-builder.Services.AddControllers().AddCloakIdModelBinding();
+builder.Services.AddControllers().AddCloakIdModelBinding(options =>
+{
+    // Configure fallback behavior - set to false for enhanced security
+    // options.AllowNumericFallback = false; // Uncomment to disable fallback and reject numeric IDs
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

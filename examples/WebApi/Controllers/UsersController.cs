@@ -104,6 +104,23 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
                 Message = $"User created with ID {newUserId} (encoded as {encodedId})"
             });
     }
+
+    /// <summary>
+    /// Example 6: Strict encoded-only endpoint (when AllowNumericFallback = false)
+    /// Route: GET api/users/strict/rs (only accepts encoded strings like "rs")
+    /// This endpoint will return 400 Bad Request if you try: GET api/users/strict/33
+    /// Note: The behavior depends on the AllowNumericFallback configuration in Program.cs
+    /// </summary>
+    [HttpGet("strict/{id}")]
+    public IActionResult GetUserStrict([CloakId] int id)
+    {
+        return Ok(new { 
+            Method = "Strict encoded-only (respects AllowNumericFallback setting)",
+            UserId = id,
+            EncodedId = codec.Encode(id, typeof(int)),
+            Message = $"Retrieved user {id} - this endpoint behavior depends on AllowNumericFallback setting"
+        });
+    }
 }
 
 public record CreateUserRequest(string Name);

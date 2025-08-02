@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace CloakId.AspNetCore;
 
 /// <summary>
 /// Model binder provider that creates CloakIdModelBinder instances for numeric parameters.
 /// This version provides binding for all numeric types and attempts to decode CloakId strings,
-/// falling back to default binding if decoding fails.
+/// falling back to default binding if decoding fails (based on configuration).
 /// </summary>
 public class CloakIdModelBinderProvider : IModelBinderProvider
 {
@@ -20,7 +21,9 @@ public class CloakIdModelBinderProvider : IModelBinderProvider
         // Only provide binder for numeric types that CloakId supports
         if (IsNumericType(underlyingType))
         {
-            return new CloakIdModelBinder(context.Services.GetRequiredService<Abstractions.ICloakIdCodec>());
+            var codec = context.Services.GetRequiredService<Abstractions.ICloakIdCodec>();
+            var options = context.Services.GetRequiredService<IOptions<CloakIdAspNetCoreOptions>>();
+            return new CloakIdModelBinder(codec, options);
         }
 
         return null;
