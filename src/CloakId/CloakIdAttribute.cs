@@ -3,9 +3,9 @@ using System;
 namespace CloakId;
 
 /// <summary>
-/// Marks a numeric property to be encoded/decoded as a cloaked string during JSON serialization.
+/// Marks a numeric property or parameter to be encoded/decoded as a cloaked string during JSON serialization or model binding.
 /// </summary>
-[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
 public class CloakIdAttribute : Attribute
 {
     /// <summary>

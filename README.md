@@ -112,6 +112,25 @@ var encoded = codec.Encode(originalValue, typeof(int)); // "A6das1"
 var decoded = (int)codec.Decode(encoded, typeof(int)); // 12345
 ```
 
+## ASP.NET Core Model Binding
+
+CloakId includes built-in support for ASP.NET Core model binding, allowing automatic conversion of encoded route parameters:
+
+```csharp
+// Enable model binding in Program.cs
+builder.Services.AddCloakIdWithSqids();
+builder.Services.AddControllers().AddCloakIdModelBinding();
+
+// Use in controllers
+[HttpGet("{id}")]
+public IActionResult GetUser([CloakId] int id) // Automatically converts "A6das1" → 12345
+{
+    return Ok(new { UserId = id });
+}
+```
+
+Routes like `GET /api/users/A6das1` will automatically convert the encoded string to the numeric ID before reaching your controller method. See [Model Binding Documentation](docs/ModelBinding.md) for complete details.
+
 ## Configuration Options
 
 ### Sqids Configuration
