@@ -1,6 +1,6 @@
 <div align="center">
 
-![CloakId logo](docs/images/logo-1024x1024.png)
+![CloakId logo](docs/images/logo-512x512.png)
 	
 # CloakId
 
