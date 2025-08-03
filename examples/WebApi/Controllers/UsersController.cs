@@ -2,7 +2,7 @@ using CloakId;
 using CloakId.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApiExample.Controllers;
+namespace WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -100,7 +100,7 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
             new { 
                 UserId = newUserId,
                 EncodedId = encodedId,
-                Name = request.Name,
+                request.Name,
                 Message = $"User created with ID {newUserId} (encoded as {encodedId})"
             });
     }
