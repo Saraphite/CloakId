@@ -11,6 +11,51 @@ A .NET library that provides automatic encoding/decoding of numeric properties t
 - **Type safety**: Compile-time type checking with support for all numeric types
 - **Nullable support**: Full support for nullable numeric types
 
+## Why This Library Is Useful
+
+While CloakId is **not a substitute for proper security measures** like Role-Based Access Control (RBAC), authentication, and authorization, it provides valuable protection against information disclosure and business intelligence gathering.
+
+### Business Intelligence Protection
+
+**The German Tank Problem**: During WWII, Allied forces estimated German tank production by analyzing captured tank serial numbers. By observing the highest serial number and using statistical analysis, they could accurately determine total production numbers and manufacturing rates. This same principle applies to modern web applications.
+
+### Real-World Scenarios
+
+**Competitor Analysis**: 
+- A competitor signs up for your service and receives user ID `12345`
+- One month later, they create another account and receive user ID `15678`  
+- **Without obfuscation**: They now know you gained ~3,333 users that month
+- **With CloakId**: They see IDs like `A6das1` and `xnF9Hu` - no business intelligence can be extracted
+
+**Resource Enumeration**:
+- Attackers often probe sequential IDs to map your system: `/api/users/1`, `/api/users/2`, etc.
+- **Without obfuscation**: Reveals total user count, active vs. deleted accounts, growth patterns
+- **With CloakId**: Each ID appears random, preventing systematic enumeration
+
+### Security Through Defense in Depth
+
+CloakId adds an important layer to your security strategy:
+
+1. **Primary Security**: RBAC, authentication, authorization (always required)
+2. **Secondary Security**: CloakId obfuscation (makes attacks harder)
+3. **Monitoring**: Track suspicious patterns in your metrics
+
+### What CloakId Prevents
+
+- **Business intelligence gathering** by competitors
+- **Growth rate analysis** through sequential ID observation  
+- **Database size estimation** via highest observed IDs
+- **Resource enumeration attacks** using predictable patterns
+- **Information leakage** about internal system architecture
+
+### What CloakId Does NOT Provide
+
+- **Authentication or authorization** - you still need proper access controls
+- **Cryptographic security** - this is obfuscation, not encryption
+- **Protection against authorized users** - valid users can still access their permitted data
+
+**Remember**: CloakId is about making unauthorized reconnaissance significantly more difficult, not replacing fundamental security practices.
+
 ## Quick Start
 
 ### 1. Install packages
