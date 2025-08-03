@@ -52,7 +52,6 @@ CloakId adds an important layer to your security strategy:
 - **Growth rate analysis** through sequential ID observation  
 - **Database size estimation** via highest observed IDs
 - **Resource enumeration attacks** using predictable patterns
-- **Information leakage** about internal system architecture
 
 ### What CloakId Does NOT Provide
 
