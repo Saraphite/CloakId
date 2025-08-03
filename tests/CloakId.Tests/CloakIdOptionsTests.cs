@@ -5,13 +5,13 @@ namespace CloakId.Tests;
 public class CloakIdOptionsTests
 {
     [Fact]
-    public void MinLength_DefaultValue_ShouldBeZero()
+    public void MinLength_DefaultValue_ShouldBeSix()
     {
         // Arrange & Act
         var options = new CloakIdOptions();
 
         // Assert
-        Assert.Equal(0, options.MinLength);
+        Assert.Equal(6, options.MinLength);
     }
 
     [Theory]
@@ -160,7 +160,7 @@ public class CloakIdOptionsTests
         var options = new CloakIdOptions();
 
         // Assert
-        Assert.Equal(0, options.MinLength);
+        Assert.Equal(6, options.MinLength);
         Assert.Null(options.Alphabet);
     }
 

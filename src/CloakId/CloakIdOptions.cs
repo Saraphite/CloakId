@@ -5,12 +5,12 @@ namespace CloakId;
 /// </summary>
 public class CloakIdOptions
 {
-    private int _minLength = 0;
+    private int _minLength = 6;
     private string? _alphabet;
 
     /// <summary>
     /// Gets or sets the minimum length of generated encoded IDs.
-    /// Default is 0 (no minimum length).
+    /// Default is 6.
     /// </summary>
     public int MinLength 
     { 
