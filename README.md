@@ -11,7 +11,7 @@ A .NET library that provides automatic encoding/decoding of numeric properties t
 - **Type safety**: Compile-time type checking with support for all numeric types
 - **Nullable support**: Full support for nullable numeric types
 
-## Why This Library Is Useful
+## Why This Library is Useful
 
 While CloakId is **not a substitute for proper security measures** like Role-Based Access Control (RBAC), authentication, and authorization, it provides valuable protection against information disclosure and business intelligence gathering.
 
