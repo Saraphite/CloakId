@@ -37,7 +37,7 @@ public class ModelBindingTests
         // Assert
         var serviceProvider = services.BuildServiceProvider();
         var mvcOptions = serviceProvider.GetRequiredService<IOptions<MvcOptions>>().Value;
-        
+
         Assert.Contains(mvcOptions.ModelBinderProviders, provider => provider is CloakIdModelBinderProvider);
         Assert.Equal(typeof(CloakIdModelBinderProvider), mvcOptions.ModelBinderProviders[0].GetType());
     }
@@ -66,7 +66,7 @@ public class ModelBindingTests
     {
         // Arrange
         var options = Options.Create(new CloakIdAspNetCoreOptions());
-        
+
         // Act
         var binder = new CloakIdModelBinder(_codec, options);
 
@@ -79,7 +79,7 @@ public class ModelBindingTests
     {
         // Arrange
         var originalValue = 12345;
-        
+
         // Act
         var encodedValue = _codec.Encode(originalValue, typeof(int));
         var decodedValue = _codec.Decode(encodedValue, typeof(int));

@@ -1,4 +1,4 @@
-﻿namespace CloakId.Abstractions;
+namespace CloakId.Abstractions;
 
 /// <summary>
 /// Provides encoding and decoding functionality for numeric values.

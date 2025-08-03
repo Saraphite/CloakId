@@ -12,10 +12,10 @@ public class CloakIdOptions
     /// Gets or sets the minimum length of generated encoded IDs.
     /// Default is 6.
     /// </summary>
-    public int MinLength 
-    { 
-        get => _minLength; 
-        set 
+    public int MinLength
+    {
+        get => _minLength;
+        set
         {
             if (value < 0)
                 throw new ArgumentOutOfRangeException(nameof(value), "MinLength must be 0 or greater.");
@@ -28,10 +28,10 @@ public class CloakIdOptions
     /// If null, the default alphabet for the specific implementation will be used.
     /// Most implementations support customizing the characters used in encoded IDs.
     /// </summary>
-    public string? Alphabet 
-    { 
-        get => _alphabet; 
-        set 
+    public string? Alphabet
+    {
+        get => _alphabet;
+        set
         {
             if (value != null)
             {

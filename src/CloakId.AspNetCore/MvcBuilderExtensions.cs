@@ -44,7 +44,7 @@ public static class MvcBuilderExtensions
     public static IMvcBuilder AddCloakIdModelBinding(this IMvcBuilder builder, Action<CloakIdAspNetCoreOptions> configureOptions)
     {
         builder.Services.Configure(configureOptions);
-        
+
         builder.Services.Configure<MvcOptions>(options =>
         {
             options.ModelBinderProviders.Insert(0, new CloakIdModelBinderProvider());

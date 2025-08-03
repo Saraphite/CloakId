@@ -1,4 +1,4 @@
-﻿using CloakId.Abstractions;
+using CloakId.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CloakId;
