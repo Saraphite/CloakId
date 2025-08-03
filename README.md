@@ -187,7 +187,7 @@ builder.Services.AddControllers().AddCloakIdModelBinding(options =>
     // Disable numeric fallback for better security (default: false)
     // When false: only accepts encoded strings, rejects numeric IDs
     // When true: accepts both encoded strings and numeric IDs (backwards compatibility)
-    options.AllowNumericFallback = true;
+    options.AllowNumericFallback = false;
 });
 ```
 
