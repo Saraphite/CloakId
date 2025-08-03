@@ -1,8 +1,8 @@
+using System.Reflection;
+using System.Text.Json;
 using CloakId.AspNetCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Reflection;
-using System.Text.Json;
 using Xunit;
 
 namespace CloakId.Tests;

@@ -19,9 +19,10 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
         try
         {
             var userId = (int)codec.Decode(encodedId, typeof(int));
-            return Ok(new { 
+            return Ok(new
+            {
                 Method = "Manual conversion",
-                UserId = userId, 
+                UserId = userId,
                 EncodedId = encodedId,
                 Message = $"Successfully decoded '{encodedId}' to user ID {userId}"
             });
@@ -40,7 +41,8 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
     [HttpGet("auto/{id}")]
     public IActionResult GetUserAuto([CloakId] int id)
     {
-        return Ok(new { 
+        return Ok(new
+        {
             Method = "Automatic conversion (model binder)",
             UserId = id,
             EncodedId = codec.Encode(id, typeof(int)),
@@ -55,7 +57,8 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
     [HttpGet("{userId}/posts/{postId}")]
     public IActionResult GetUserPost([CloakId] int userId, [CloakId] long postId)
     {
-        return Ok(new { 
+        return Ok(new
+        {
             Method = "Multiple automatic conversions",
             UserId = userId,
             PostId = postId,
@@ -75,7 +78,8 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
     {
         // This works because the model binder falls back to default binding
         // if the string can't be decoded as a CloakId
-        return Ok(new { 
+        return Ok(new
+        {
             Method = "Fallback (works with encoded or numeric)",
             UserId = id,
             EncodedId = codec.Encode(id, typeof(int)),
@@ -93,11 +97,12 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
         // Simulate creating a user and getting a new ID
         var newUserId = Random.Shared.Next(1000, 9999);
         var encodedId = codec.Encode(newUserId, typeof(int));
-        
+
         return CreatedAtAction(
-            nameof(GetUserAuto), 
-            new { id = encodedId }, 
-            new { 
+            nameof(GetUserAuto),
+            new { id = encodedId },
+            new
+            {
                 UserId = newUserId,
                 EncodedId = encodedId,
                 request.Name,
@@ -114,7 +119,8 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
     [HttpGet("strict/{id}")]
     public IActionResult GetUserStrict([CloakId] int id)
     {
-        return Ok(new { 
+        return Ok(new
+        {
             Method = "Strict encoded-only (respects AllowNumericFallback setting)",
             UserId = id,
             EncodedId = codec.Encode(id, typeof(int)),

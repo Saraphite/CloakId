@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <AssemblyName>CloakId.Sqids</AssemblyName>
+    <PackageId>CloakId.Sqids</PackageId>
+    <Description>Sqids implementation for CloakId - provides URL-safe, configurable ID obfuscation using the Sqids algorithm.</Description>
   </PropertyGroup>
 
   <ItemGroup>

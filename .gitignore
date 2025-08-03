@@ -41,6 +41,11 @@ ScaffoldingReadMe.txt
 *~
 CodeCoverage/
 
+# CI/CD artifacts
+packages/
+coverage/
+*.trx
+
 # MSBuild Binary and Structured Log
 *.binlog
 

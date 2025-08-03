@@ -1,6 +1,6 @@
+using System.Reflection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Reflection;
 
 namespace CloakId.AspNetCore;
 
@@ -22,7 +22,7 @@ public class CloakIdOpenApiFilter : IOperationFilter
         for (int i = 0; i < parameters.Length && i < operation.Parameters.Count; i++)
         {
             var parameterInfo = parameters[i];
-            var openApiParameter = operation.Parameters.FirstOrDefault(p => 
+            var openApiParameter = operation.Parameters.FirstOrDefault(p =>
                 string.Equals(p.Name, parameterInfo.Name, StringComparison.OrdinalIgnoreCase));
 
             if (openApiParameter == null) continue;
@@ -36,7 +36,7 @@ public class CloakIdOpenApiFilter : IOperationFilter
                 {
                     Type = "string",
                     Format = null, // Remove any numeric format
-                    Description = openApiParameter.Schema?.Description ?? 
+                    Description = openApiParameter.Schema?.Description ??
                         $"Encoded string representation of a {GetFriendlyTypeName(parameterInfo.ParameterType)} value. " +
                         "This parameter accepts encoded string values (e.g., 'A6das1') rather than raw numeric values."
                 };
@@ -49,7 +49,7 @@ public class CloakIdOpenApiFilter : IOperationFilter
 
                 // Update extensions to indicate this is a CloakId parameter
                 openApiParameter.Extensions["x-cloakid"] = new Microsoft.OpenApi.Any.OpenApiBoolean(true);
-                openApiParameter.Extensions["x-cloakid-original-type"] = 
+                openApiParameter.Extensions["x-cloakid-original-type"] =
                     new Microsoft.OpenApi.Any.OpenApiString(GetFriendlyTypeName(parameterInfo.ParameterType));
             }
         }
@@ -81,7 +81,7 @@ public class CloakIdOpenApiFilter : IOperationFilter
         return type.Name switch
         {
             "Int32" => "int",
-            "UInt32" => "uint", 
+            "UInt32" => "uint",
             "Int64" => "long",
             "UInt64" => "ulong",
             "Int16" => "short",

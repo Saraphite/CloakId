@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <AssemblyName>CloakId</AssemblyName>
+    <PackageId>CloakId</PackageId>
+    <Description>Core library for obfuscating integer IDs with configurable encoding strategies and JSON serialization support.</Description>
   </PropertyGroup>
 
   <ItemGroup>

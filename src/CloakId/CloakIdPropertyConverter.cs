@@ -1,6 +1,6 @@
-using CloakId.Abstractions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using CloakId.Abstractions;
 
 namespace CloakId;
 

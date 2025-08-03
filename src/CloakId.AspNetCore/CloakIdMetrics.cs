@@ -16,6 +16,15 @@ public class CloakIdMetrics
     private static string GetAssemblyVersion()
     {
         var assembly = Assembly.GetExecutingAssembly();
+
+        // Try to get the InformationalVersion first (includes full version with pre-release tags)
+        var informationalVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        if (informationalVersion != null && !string.IsNullOrEmpty(informationalVersion.InformationalVersion))
+        {
+            return informationalVersion.InformationalVersion;
+        }
+
+        // Fallback to AssemblyVersion
         var version = assembly.GetName().Version;
         return version?.ToString() ?? "1.0.0";
     }

@@ -1,8 +1,8 @@
+using System.Text.Json;
 using CloakId;
 using CloakId.Abstractions;
 using CloakId.Sqids;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json;
 
 // Example usage showing the new attribute-based approach
 
@@ -170,15 +170,15 @@ public class UserDto
 {
     [CloakId]
     public int UserId { get; set; }
-    
+
     [CloakId]
     public long AccountId { get; set; }
-    
+
     // Regular properties without the attribute remain unchanged
     public int RegularId { get; set; }
-    
+
     public string Name { get; set; } = null!;
-    
+
     [CloakId]
     public int? OptionalId { get; set; }
 }

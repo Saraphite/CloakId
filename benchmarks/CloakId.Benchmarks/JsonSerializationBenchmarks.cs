@@ -1,8 +1,8 @@
+using System.Text.Json;
 using BenchmarkDotNet.Attributes;
 using CloakId.Abstractions;
 using CloakId.Sqids;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json;
 
 namespace CloakId.Benchmarks;
 
@@ -161,7 +161,7 @@ public class JsonSerializationBenchmarks
         [CloakId] public short ShortId2 { get; set; } = 20;
         [CloakId] public ushort UshortId1 { get; set; } = 30;
         [CloakId] public ushort UshortId2 { get; set; } = 40;
-        
+
         public string Name { get; set; } = "Large Model Test";
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public bool IsActive { get; set; } = true;

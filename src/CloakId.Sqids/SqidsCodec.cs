@@ -3,6 +3,9 @@ using Sqids;
 
 namespace CloakId.Sqids;
 
+/// <summary>
+/// Sqids implementation of ICloakIdCodec for encoding and decoding integer IDs.
+/// </summary>
 public class SqidsCodec(
     SqidsEncoder<int> intEncoder,
     SqidsEncoder<uint> uintEncoder,
@@ -11,7 +14,9 @@ public class SqidsCodec(
     SqidsEncoder<short> shortEncoder,
     SqidsEncoder<ushort> ushortEncoder) : ICloakIdCodec
 {
-
+    /// <summary>
+    /// Encodes a numeric value to a string using Sqids.
+    /// </summary>
     public string Encode(object value, Type valueType)
     {
         var actualType = Nullable.GetUnderlyingType(valueType) ?? valueType;
@@ -28,6 +33,9 @@ public class SqidsCodec(
         };
     }
 
+    /// <summary>
+    /// Decodes a Sqids string back to the original numeric value.
+    /// </summary>
     public object Decode(string encodedValue, Type targetType)
     {
         var actualType = Nullable.GetUnderlyingType(targetType) ?? targetType;

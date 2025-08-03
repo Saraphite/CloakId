@@ -1,0 +1,65 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- Common properties for all projects -->
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile Condition="'$(IsPackable)' != 'false'">true</GenerateDocumentationFile>
+    
+    <!-- Suppress XML documentation warnings for now -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    
+    <!-- Version properties - will be overridden by CI/CD pipeline -->
+    <VersionPrefix Condition="'$(VersionPrefix)' == ''">1.0.0</VersionPrefix>
+    <VersionSuffix Condition="'$(VersionSuffix)' == ''"></VersionSuffix>
+    <Version Condition="'$(Version)' == '' AND '$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</Version>
+    <Version Condition="'$(Version)' == '' AND '$(VersionSuffix)' == ''">$(VersionPrefix)</Version>
+    
+    <!-- Assembly version properties - keep assembly version stable, use file version for builds -->
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+    <FileVersion>$(Version)</FileVersion>
+    <InformationalVersion>$(Version)</InformationalVersion>
+    
+    <!-- Package version explicitly set to match assembly version -->
+    <PackageVersion>$(Version)</PackageVersion>
+    
+    <!-- Package properties -->
+    <Authors>Saraphite</Authors>
+    <Company>Saraphite</Company>
+    <Product>CloakId</Product>
+    <Description>A .NET library for obfuscating integer IDs using configurable encoding strategies.</Description>
+    <Copyright>Copyright (c) 2025 Saraphite</Copyright>
+    <PackageProjectUrl>https://github.com/Saraphite/CloakId</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Saraphite/CloakId</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>id-obfuscation;sqids;encoding;asp-net-core;web-api</PackageTags>
+    <PackageReleaseNotes>See https://github.com/Saraphite/CloakId/releases</PackageReleaseNotes>
+    
+    <!-- Source Link -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    
+    <!-- Deterministic builds -->
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(IsPackable)' != 'false'">
+    <!-- Include package assets -->
+    <None Include="$(MSBuildThisFileDirectory)docs/images/logo-512x512.png" Pack="true" PackagePath="icon.png" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="README.md" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(IsPackable)' != 'false'">
+    <!-- Source Link support -->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>

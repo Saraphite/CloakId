@@ -1,5 +1,5 @@
-using CloakId.Sqids;
 using CloakId.AspNetCore;
+using CloakId.Sqids;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +22,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "CloakId WebAPI Example", Version = "v1" });
-    
+
     // Add CloakId OpenAPI support - parameters marked with [CloakId] will be documented as strings
     c.AddCloakIdSupport();
 });

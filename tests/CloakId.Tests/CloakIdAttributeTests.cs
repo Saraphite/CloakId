@@ -1,7 +1,7 @@
+using System.Text.Json;
 using CloakId.Abstractions;
 using CloakId.Sqids;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json;
 using Xunit;
 
 namespace CloakId.Tests;
@@ -17,12 +17,12 @@ public class CloakIdAttributeTests
         var services = new ServiceCollection();
         services.AddCloakIdWithSqids();
         services.AddCloakId();
-        
+
         var serviceProvider = services.BuildServiceProvider();
-        
+
         _codec = serviceProvider.GetRequiredService<ICloakIdCodec>();
         var typeInfoResolver = serviceProvider.GetRequiredService<CloakIdTypeInfoResolver>();
-        
+
         _jsonOptions = new JsonSerializerOptions
         {
             TypeInfoResolver = typeInfoResolver
@@ -48,7 +48,7 @@ public class CloakIdAttributeTests
         Assert.Contains("\"CloakedId\":", json);
         Assert.Contains("\"RegularId\":67890", json); // Regular ID should remain numeric
         Assert.DoesNotContain("12345", json); // Cloaked ID should be encoded
-        
+
         Assert.Equal(12345, deserialized!.CloakedId);
         Assert.Equal(67890, deserialized.RegularId);
         Assert.Equal("Test", deserialized.Name);
@@ -75,7 +75,7 @@ public class CloakIdAttributeTests
         Assert.Equal(456789012345L, deserialized.LongId);
         Assert.Equal(789U, deserialized.UIntId);
         Assert.Equal((short)321, deserialized.ShortId);
-        
+
         // Verify all values are encoded as strings in JSON
         Assert.DoesNotContain("123", json);
         Assert.DoesNotContain("456789012345", json);
@@ -142,9 +142,9 @@ public class CloakIdAttributeTests
     {
         [CloakId]
         public int CloakedId { get; set; }
-        
+
         public int RegularId { get; set; }
-        
+
         public string Name { get; set; } = null!;
     }
 
@@ -160,7 +160,7 @@ public class CloakIdAttributeTests
     {
         [CloakId]
         public int RequiredId { get; set; }
-        
+
         [CloakId]
         public int? OptionalId { get; set; }
     }
