@@ -7,7 +7,7 @@ namespace CloakId.AspNetCore;
 /// <summary>
 /// Model binder for automatically converting encoded CloakId strings to their underlying numeric types.
 /// </summary>
-public class CloakIdModelBinder(ICloakIdCodec codec, IOptions<CloakIdOptions> options) : IModelBinder
+public class CloakIdModelBinder(ICloakIdCodec codec, IOptions<CloakIdAspNetCoreOptions> options) : IModelBinder
 {
     public Task BindModelAsync(ModelBindingContext bindingContext)
     {

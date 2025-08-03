@@ -10,6 +10,9 @@ builder.Services.AddCloakIdWithSqids(options =>
     // options.Alphabet = "custom123456789abcdefghijk"; // Custom alphabet example
 });
 
+// Add CloakId metrics for monitoring
+builder.Services.AddCloakIdMetrics();
+
 // Add controllers with CloakId ASP.NET Core integration (model binding)
 builder.Services.AddControllers().AddCloakIdModelBinding(options =>
 {

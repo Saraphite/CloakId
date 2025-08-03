@@ -131,6 +131,37 @@ public IActionResult GetUser([CloakId] int id) // Automatically converts "A6das1
 
 Routes like `GET /api/users/A6das1` will automatically convert the encoded string to the numeric ID before reaching your controller method. See [Model Binding Documentation](docs/ModelBinding.md) for complete details.
 
+## Security Configuration
+
+CloakId provides configurable security options for model binding:
+
+```csharp
+// Configure fallback behavior for enhanced security
+builder.Services.AddControllers().AddCloakIdModelBinding(options =>
+{
+    // Disable numeric fallback for better security (default: false)
+    // When false: only accepts encoded strings, rejects numeric IDs
+    // When true: accepts both encoded strings and numeric IDs (backwards compatibility)
+    options.AllowNumericFallback = true;
+});
+```
+
+**Security Note**: Setting `AllowNumericFallback = false` provides better security by rejecting any non-encoded values, but may break existing clients that send numeric IDs. The fallback behavior could potentially expose alphabet patterns through systematic testing.
+
+## Metrics and Monitoring
+
+CloakId includes built-in metrics using `System.Diagnostics.Metrics` for monitoring security-related behavior:
+
+### Available Metrics
+
+- `cloakid_model_binding_decoding_success_total` - Successful decodings
+- `cloakid_model_binding_decoding_failure_total` - Failed decodings  
+- `cloakid_model_binding_numeric_fallback_total` - **Security-relevant**: Fallback usage
+- `cloakid_model_binding_fallback_rejection_total` - Rejected requests when fallback disabled
+- `cloakid_model_binding_decoding_duration_ms` - Decoding performance
+
+The **numeric fallback metric** is particularly important for security monitoring as it can indicate potential attempts to probe the encoding alphabet through systematic testing.
+
 ## Configuration Options
 
 ### Sqids Configuration

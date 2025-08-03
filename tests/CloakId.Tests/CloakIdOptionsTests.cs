@@ -22,10 +22,11 @@ public class CloakIdOptionsTests
     public void MinLength_ValidValues_ShouldSetSuccessfully(int validMinLength)
     {
         // Arrange
-        var options = new CloakIdOptions();
-
-        // Act & Assert
-        options.MinLength = validMinLength;
+        var options = new CloakIdOptions
+        {
+            // Act & Assert
+            MinLength = validMinLength
+        };
         Assert.Equal(validMinLength, options.MinLength);
     }
 
@@ -74,10 +75,11 @@ public class CloakIdOptionsTests
     public void Alphabet_ValidAlphabets_ShouldSetSuccessfully(string validAlphabet)
     {
         // Arrange
-        var options = new CloakIdOptions();
-
-        // Act & Assert
-        options.Alphabet = validAlphabet;
+        var options = new CloakIdOptions
+        {
+            // Act & Assert
+            Alphabet = validAlphabet
+        };
         Assert.Equal(validAlphabet, options.Alphabet);
     }
 

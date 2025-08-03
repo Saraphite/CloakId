@@ -41,7 +41,7 @@ public static class MvcBuilderExtensions
     /// });
     /// </code>
     /// </example>
-    public static IMvcBuilder AddCloakIdModelBinding(this IMvcBuilder builder, Action<CloakIdOptions> configureOptions)
+    public static IMvcBuilder AddCloakIdModelBinding(this IMvcBuilder builder, Action<CloakIdAspNetCoreOptions> configureOptions)
     {
         builder.Services.Configure(configureOptions);
         

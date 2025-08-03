@@ -64,8 +64,11 @@ public class ModelBindingTests
     [Fact]
     public void CloakIdModelBinder_CanBeCreated_WithCodec()
     {
-        // Arrange & Act
-        var binder = new CloakIdModelBinder(_codec);
+        // Arrange
+        var options = Options.Create(new CloakIdAspNetCoreOptions());
+        
+        // Act
+        var binder = new CloakIdModelBinder(_codec, options);
 
         // Assert
         Assert.NotNull(binder);
