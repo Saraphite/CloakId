@@ -35,13 +35,13 @@ jobs:
           ${{ runner.os }}-nuget-
     
     - name: Restore dependencies
-      run: dotnet restore CloakId.slnx
+      run: dotnet restore CloakId.sln
     
     - name: Build solution
-      run: dotnet build CloakId.slnx --no-restore --configuration Release
+      run: dotnet build CloakId.sln --no-restore --configuration Release
     
     - name: Run tests
-      run: dotnet test CloakId.slnx --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
+      run: dotnet test CloakId.sln --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
     
     - name: Upload coverage reports
       uses: codecov/codecov-action@v4

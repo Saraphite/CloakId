@@ -21,7 +21,8 @@ Write-Host "Configuration: $Configuration" -ForegroundColor Blue
 
 # Restore dependencies
 Write-Host "[1/5] Restoring dependencies..." -ForegroundColor Yellow
-dotnet restore CloakId.slnx
+$solutionFile = "CloakId.sln"
+dotnet restore $solutionFile
 if ($LASTEXITCODE -ne 0) { 
     Write-Host "ERROR: Restore failed" -ForegroundColor Red
     exit $LASTEXITCODE 
@@ -29,7 +30,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # Build solution
 Write-Host "[2/5] Building solution..." -ForegroundColor Yellow
-$buildArgs = @("build", "CloakId.slnx", "--no-restore", "--configuration", $Configuration)
+$buildArgs = @("build", $solutionFile, "--no-restore", "--configuration", $Configuration)
 if ($Version) {
     $buildArgs += "-p:VersionPrefix=$Version"
 }
@@ -41,7 +42,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # Check formatting
 Write-Host "[3/5] Checking code formatting..." -ForegroundColor Yellow
-dotnet format CloakId.slnx --verify-no-changes --verbosity minimal
+dotnet format $solutionFile --verify-no-changes --verbosity minimal
 if ($LASTEXITCODE -ne 0) { 
     Write-Host "ERROR: Code formatting check failed. Run 'dotnet format' to fix." -ForegroundColor Red
     exit $LASTEXITCODE 
@@ -50,7 +51,7 @@ if ($LASTEXITCODE -ne 0) {
 # Run tests
 if (-not $SkipTests) {
     Write-Host "[4/5] Running tests..." -ForegroundColor Yellow
-    dotnet test CloakId.slnx --no-build --configuration $Configuration --verbosity minimal
+    dotnet test $solutionFile --no-build --configuration $Configuration --verbosity minimal
     if ($LASTEXITCODE -ne 0) { 
         Write-Host "ERROR: Tests failed" -ForegroundColor Red
         exit $LASTEXITCODE 

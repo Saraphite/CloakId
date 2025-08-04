@@ -35,13 +35,13 @@ jobs:
         echo "Version: $VERSION"
     
     - name: Restore dependencies
-      run: dotnet restore CloakId.slnx
+      run: dotnet restore CloakId.sln
     
     - name: Build solution
-      run: dotnet build CloakId.slnx --no-restore --configuration Release -p:Version=${{ steps.get_version.outputs.VERSION }} -p:AssemblyVersion=${{ steps.get_version.outputs.VERSION }} -p:FileVersion=${{ steps.get_version.outputs.VERSION }} -p:InformationalVersion=${{ steps.get_version.outputs.VERSION }}
+      run: dotnet build CloakId.sln --no-restore --configuration Release -p:Version=${{ steps.get_version.outputs.VERSION }} -p:AssemblyVersion=${{ steps.get_version.outputs.VERSION }} -p:FileVersion=${{ steps.get_version.outputs.VERSION }} -p:InformationalVersion=${{ steps.get_version.outputs.VERSION }}
     
     - name: Run tests
-      run: dotnet test CloakId.slnx --no-build --configuration Release --verbosity normal
+      run: dotnet test CloakId.sln --no-build --configuration Release --verbosity normal
     
     - name: Pack NuGet packages
       run: |
