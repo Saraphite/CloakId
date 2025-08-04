@@ -36,10 +36,10 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
     /// <summary>
     /// Example 2: Automatic conversion with model binder
     /// Route: GET api/users/auto/rs (where "rs" is an encoded ID for user 33)
-    /// The [CloakId] attribute tells the model binder to automatically convert the string
+    /// The [Cloak] attribute tells the model binder to automatically convert the string
     /// </summary>
     [HttpGet("auto/{id}")]
-    public IActionResult GetUserAuto([CloakId] int id)
+    public IActionResult GetUserAuto([Cloak] int id)
     {
         return Ok(new
         {
@@ -55,7 +55,7 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
     /// Route: GET api/users/rs/posts/PQ (where "rs" = user 33, "PQ" = post 20)
     /// </summary>
     [HttpGet("{userId}/posts/{postId}")]
-    public IActionResult GetUserPost([CloakId] int userId, [CloakId] long postId)
+    public IActionResult GetUserPost([Cloak] int userId, [Cloak] long postId)
     {
         return Ok(new
         {
@@ -74,7 +74,7 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
     /// Note: Numeric values work because the model binder falls back to default parsing if decoding fails
     /// </summary>
     [HttpGet("fallback/{id}")]
-    public IActionResult GetUserFallback([CloakId] int id)
+    public IActionResult GetUserFallback([Cloak] int id)
     {
         // This works because the model binder falls back to default binding
         // if the string can't be decoded as a CloakId
@@ -117,7 +117,7 @@ public class UsersController(ICloakIdCodec codec) : ControllerBase
     /// Note: The behavior depends on the AllowNumericFallback configuration in Program.cs
     /// </summary>
     [HttpGet("strict/{id}")]
-    public IActionResult GetUserStrict([CloakId] int id)
+    public IActionResult GetUserStrict([Cloak] int id)
     {
         return Ok(new
         {

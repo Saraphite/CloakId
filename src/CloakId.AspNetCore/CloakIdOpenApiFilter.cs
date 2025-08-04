@@ -7,7 +7,7 @@ namespace CloakId.AspNetCore;
 /// <summary>
 /// OpenAPI operation filter that modifies parameter schemas for CloakId-marked parameters.
 /// This ensures that the API documentation correctly shows string parameters instead of numeric types
-/// for parameters marked with the [CloakId] attribute.
+/// for parameters marked with the [Cloak] attribute.
 /// </summary>
 public class CloakIdOpenApiFilter : IOperationFilter
 {
@@ -27,9 +27,9 @@ public class CloakIdOpenApiFilter : IOperationFilter
 
             if (openApiParameter == null) continue;
 
-            // Check if the parameter has the CloakId attribute
-            var cloakIdAttribute = parameterInfo.GetCustomAttribute<CloakIdAttribute>();
-            if (cloakIdAttribute != null && IsNumericType(parameterInfo.ParameterType))
+            // Check if the parameter has the Cloak attribute
+            var cloakAttribute = parameterInfo.GetCustomAttribute<CloakAttribute>();
+            if (cloakAttribute != null && IsNumericType(parameterInfo.ParameterType))
             {
                 // Modify the parameter to be a string type in the OpenAPI spec
                 openApiParameter.Schema = new OpenApiSchema

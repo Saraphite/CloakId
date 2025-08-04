@@ -11,7 +11,7 @@ public static class MvcBuilderExtensions
     /// <summary>
     /// Adds CloakId model binding support to ASP.NET Core MVC with default options.
     /// This enables automatic conversion of encoded route parameters to their underlying numeric types
-    /// for parameters marked with the [CloakId] attribute.
+    /// for parameters marked with the [Cloak] attribute.
     /// </summary>
     /// <param name="builder">The IMvcBuilder to configure.</param>
     /// <returns>The IMvcBuilder for chaining.</returns>
@@ -28,7 +28,7 @@ public static class MvcBuilderExtensions
     /// <summary>
     /// Adds CloakId model binding support to ASP.NET Core MVC with custom configuration.
     /// This enables automatic conversion of encoded route parameters to their underlying numeric types
-    /// for parameters marked with the [CloakId] attribute.
+    /// for parameters marked with the [Cloak] attribute.
     /// </summary>
     /// <param name="builder">The IMvcBuilder to configure.</param>
     /// <param name="configureOptions">Action to configure CloakId ASP.NET Core options.</param>

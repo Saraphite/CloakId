@@ -9,7 +9,7 @@ namespace CloakId.AspNetCore;
 public static class SwaggerGenOptionsExtensions
 {
     /// <summary>
-    /// Adds CloakId OpenAPI filter to ensure parameters marked with [CloakId] attribute
+    /// Adds CloakId OpenAPI filter to ensure parameters marked with [Cloak] attribute
     /// are correctly documented as string parameters in the OpenAPI specification.
     /// </summary>
     /// <param name="options">The SwaggerGenOptions to configure.</param>

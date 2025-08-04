@@ -17,13 +17,13 @@ public class JsonSerializationBenchmarks
 
     public class TestModel
     {
-        [CloakId]
+        [Cloak]
         public int UserId { get; set; }
 
-        [CloakId]
+        [Cloak]
         public long AccountId { get; set; }
 
-        [CloakId]
+        [Cloak]
         public int? OptionalId { get; set; }
 
         public string Name { get; set; } = "Test";
@@ -148,19 +148,19 @@ public class JsonSerializationBenchmarks
 
     public class LargeTestModel
     {
-        [CloakId] public int Id1 { get; set; } = 1;
-        [CloakId] public int Id2 { get; set; } = 2;
-        [CloakId] public int Id3 { get; set; } = 3;
-        [CloakId] public int Id4 { get; set; } = 4;
-        [CloakId] public int Id5 { get; set; } = 5;
-        [CloakId] public long LongId1 { get; set; } = 1000000L;
-        [CloakId] public long LongId2 { get; set; } = 2000000L;
-        [CloakId] public uint UintId1 { get; set; } = 100u;
-        [CloakId] public uint UintId2 { get; set; } = 200u;
-        [CloakId] public short ShortId1 { get; set; } = 10;
-        [CloakId] public short ShortId2 { get; set; } = 20;
-        [CloakId] public ushort UshortId1 { get; set; } = 30;
-        [CloakId] public ushort UshortId2 { get; set; } = 40;
+        [Cloak] public int Id1 { get; set; } = 1;
+        [Cloak] public int Id2 { get; set; } = 2;
+        [Cloak] public int Id3 { get; set; } = 3;
+        [Cloak] public int Id4 { get; set; } = 4;
+        [Cloak] public int Id5 { get; set; } = 5;
+        [Cloak] public long LongId1 { get; set; } = 1000000L;
+        [Cloak] public long LongId2 { get; set; } = 2000000L;
+        [Cloak] public uint UintId1 { get; set; } = 100u;
+        [Cloak] public uint UintId2 { get; set; } = 200u;
+        [Cloak] public short ShortId1 { get; set; } = 10;
+        [Cloak] public short ShortId2 { get; set; } = 20;
+        [Cloak] public ushort UshortId1 { get; set; } = 30;
+        [Cloak] public ushort UshortId2 { get; set; } = 40;
 
         public string Name { get; set; } = "Large Model Test";
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

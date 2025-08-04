@@ -5,7 +5,7 @@ using CloakId.Abstractions;
 namespace CloakId;
 
 /// <summary>
-/// JSON converter for properties marked with [CloakId].
+/// JSON converter for properties marked with [Cloak].
 /// </summary>
 public class CloakIdPropertyConverter(Type propertyType, ICloakIdCodec codec) : JsonConverter<object>
 {

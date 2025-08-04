@@ -10,7 +10,7 @@ A .NET library that provides automatic encoding/decoding of numeric properties t
 
 ## Features
 
-- **Attribute-based**: Simply mark properties with `[CloakId]` to enable encoding
+- **Attribute-based**: Simply mark properties with `[Cloak]` to enable encoding
 - **Automatic JSON conversion**: Properties are automatically encoded to strings during serialization and decoded back during deserialization
 - **Pluggable encoding**: Support for different encoding strategies (Sqids provided out of the box)
 - **Dependency injection**: Full integration with Microsoft.Extensions.DependencyInjection
@@ -89,18 +89,16 @@ var serviceProvider = services.BuildServiceProvider();
 ```csharp
 public class UserDto
 {
-    [CloakId]
+    [Cloak]
     public int UserId { get; set; }
-    
-    [CloakId]
-    public long AccountId { get; set; }
-    
-    // Regular properties without the attribute remain unchanged
+
+    [Cloak]
+    public long AccountId { get; set; }    // Regular properties without the attribute remain unchanged
     public int RegularId { get; set; }
     
     public string Name { get; set; }
     
-    [CloakId]
+    [Cloak]
     public int? OptionalId { get; set; }
 }
 ```
@@ -128,7 +126,7 @@ var user = new UserDto
     OptionalId = 42
 };
 
-// Serialize - only [CloakId] properties become encoded strings
+// Serialize - only [Cloak] properties become encoded strings
 var json = JsonSerializer.Serialize(user, jsonOptions);
 // Result: {"UserId":"A6das1","AccountId":"xnF9HulfM","RegularId":999,"Name":"John Doe","OptionalId":"JgaEBg"}
 
@@ -141,7 +139,7 @@ var deserializedUser = JsonSerializer.Deserialize<UserDto>(json, jsonOptions);
 
 ## Supported Types
 
-The `[CloakId]` attribute can be applied to the following numeric property types:
+The `[Cloak]` attribute can be applied to the following numeric property types:
 
 - `int` and `int?`
 - `uint` and `uint?`
@@ -173,7 +171,7 @@ builder.Services.AddControllers().AddCloakIdModelBinding();
 
 // Use in controllers
 [HttpGet("{id}")]
-public IActionResult GetUser([CloakId] int id) // Automatically converts "A6das1" → 12345
+public IActionResult GetUser([Cloak] int id) // Automatically converts "A6das1" → 12345
 {
     return Ok(new { UserId = id });
 }
@@ -277,7 +275,7 @@ Instead of exposing the raw numeric values:
 }
 ```
 
-Notice how only the properties marked with `[CloakId]` are encoded, while `RegularId` remains as a number.
+Notice how only the properties marked with `[Cloak]` are encoded, while `RegularId` remains as a number.
 
 ## Performance
 

@@ -4,7 +4,7 @@ namespace CloakId;
 /// Marks a numeric property or parameter to be encoded/decoded as a cloaked string during JSON serialization or model binding.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter, AllowMultiple = false)]
-public class CloakIdAttribute : Attribute
+public class CloakAttribute : Attribute
 {
     /// <summary>
     /// Gets or sets the minimum length of the encoded string.

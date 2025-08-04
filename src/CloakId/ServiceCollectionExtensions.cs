@@ -12,7 +12,7 @@ public static class ServiceCollectionExtensions
     /// <returns>The updated service collection.</returns>
     public static IServiceCollection AddCloakId(this IServiceCollection services)
     {
-        // Register the type info resolver for handling [CloakId] attributes
+        // Register the type info resolver for handling [Cloak] attributes
         services.AddSingleton(provider =>
         {
             var codec = provider.GetRequiredService<ICloakIdCodec>();

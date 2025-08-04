@@ -6,12 +6,12 @@ using Xunit;
 
 namespace CloakId.Tests;
 
-public class CloakIdAttributeTests
+public class CloakAttributeTests
 {
     private readonly JsonSerializerOptions _jsonOptions;
     private readonly ICloakIdCodec _codec;
 
-    public CloakIdAttributeTests()
+    public CloakAttributeTests()
     {
         // Set up dependency injection
         var services = new ServiceCollection();
@@ -30,7 +30,7 @@ public class CloakIdAttributeTests
     }
 
     [Fact]
-    public void SerializeDeserialize_CloakIdAttribute_EncodesAndDecodesCorrectly()
+    public void SerializeDeserialize_CloakAttribute_EncodesAndDecodesCorrectly()
     {
         // Arrange
         var dto = new TestDto
@@ -140,7 +140,7 @@ public class CloakIdAttributeTests
 
     private class TestDto
     {
-        [CloakId]
+        [Cloak]
         public int CloakedId { get; set; }
 
         public int RegularId { get; set; }
@@ -150,18 +150,18 @@ public class CloakIdAttributeTests
 
     private class MultiTypeTestDto
     {
-        [CloakId] public int IntId { get; set; }
-        [CloakId] public long LongId { get; set; }
-        [CloakId] public uint UIntId { get; set; }
-        [CloakId] public short ShortId { get; set; }
+        [Cloak] public int IntId { get; set; }
+        [Cloak] public long LongId { get; set; }
+        [Cloak] public uint UIntId { get; set; }
+        [Cloak] public short ShortId { get; set; }
     }
 
     private class NullableTestDto
     {
-        [CloakId]
+        [Cloak]
         public int RequiredId { get; set; }
 
-        [CloakId]
+        [Cloak]
         public int? OptionalId { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using CloakId.Abstractions;
 namespace CloakId;
 
 /// <summary>
-/// JSON converter modifier that handles properties marked with [CloakId] attribute.
+/// JSON converter modifier that handles properties marked with [Cloak] attribute.
 /// </summary>
 public class CloakIdTypeInfoResolver(ICloakIdCodec codec) : DefaultJsonTypeInfoResolver
 {
@@ -21,7 +21,7 @@ public class CloakIdTypeInfoResolver(ICloakIdCodec codec) : DefaultJsonTypeInfoR
                 var propertyType = propertyInfo.PropertyType;
                 var property = type.GetProperty(propertyInfo.Name);
 
-                if (property?.GetCustomAttribute<CloakIdAttribute>() != null &&
+                if (property?.GetCustomAttribute<CloakAttribute>() != null &&
                     IsNumericType(propertyType))
                 {
                     propertyInfo.CustomConverter = new CloakIdPropertyConverter(propertyType, codec);

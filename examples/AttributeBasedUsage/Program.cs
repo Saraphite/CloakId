@@ -168,10 +168,10 @@ Console.WriteLine($"Short ID: {deserializedMulti.ShortId}");
 // Example DTO using the new attribute approach
 public class UserDto
 {
-    [CloakId]
+    [Cloak]
     public int UserId { get; set; }
 
-    [CloakId]
+    [Cloak]
     public long AccountId { get; set; }
 
     // Regular properties without the attribute remain unchanged
@@ -179,14 +179,14 @@ public class UserDto
 
     public string Name { get; set; } = null!;
 
-    [CloakId]
+    [Cloak]
     public int? OptionalId { get; set; }
 }
 
 public class MultiTypeDto
 {
-    [CloakId] public int IntId { get; set; }
-    [CloakId] public long LongId { get; set; }
-    [CloakId] public uint UIntId { get; set; }
-    [CloakId] public short ShortId { get; set; }
+    [Cloak] public int IntId { get; set; }
+    [Cloak] public long LongId { get; set; }
+    [Cloak] public uint UIntId { get; set; }
+    [Cloak] public short ShortId { get; set; }
 }

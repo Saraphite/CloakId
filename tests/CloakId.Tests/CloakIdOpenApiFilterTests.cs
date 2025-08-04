@@ -130,10 +130,10 @@ public class CloakIdOpenApiFilterTests
     }
 
     // Test methods for reflection
-    private static void TestMethod([CloakId] int id) { }
+    private static void TestMethod([Cloak] int id) { }
     private static void TestMethodWithoutCloakId(int regularId) { }
-    private static void TestMethodWithString([CloakId] string name) { }
-    private static void TestMethodWithNullableInt([CloakId] int? optionalId) { }
+    private static void TestMethodWithString([Cloak] string name) { }
+    private static void TestMethodWithNullableInt([Cloak] int? optionalId) { }
 
     // Helper class for testing
     private class TestOperationFilterContext(MethodInfo methodInfo) : OperationFilterContext(
