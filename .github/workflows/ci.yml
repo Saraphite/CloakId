@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -26,6 +26,24 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v1.1.1
+      with:
+        versionSpec: '5.x'
+    
+    - name: Determine Version
+      uses: gittools/actions/gitversion/execute@v1.1.1
+      id: gitversion
+      with:
+        useConfigFile: true
+    
+    - name: Display Version
+      run: |
+        echo "NuGet Version: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"
+        echo "Assembly Version: ${{ steps.gitversion.outputs.assemblySemVer }}"
+        echo "Branch Name: ${{ steps.gitversion.outputs.branchName }}"
+        echo "Commit SHA: ${{ steps.gitversion.outputs.sha }}"
+    
     - name: Cache dependencies
       uses: actions/cache@v4
       with:
@@ -39,6 +57,10 @@ jobs:
     
     - name: Build solution
       run: dotnet build CloakId.sln --no-restore --configuration Release
+      env:
+        VersionPrefix: ${{ steps.gitversion.outputs.majorMinorPatch }}
+        VersionSuffix: ${{ steps.gitversion.outputs.preReleaseTag }}
+        Version: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
     
     - name: Run tests with coverage
       run: dotnet test CloakId.sln --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./TestResults
@@ -65,6 +87,10 @@ jobs:
         dotnet pack src/CloakId/CloakId.csproj --no-build --configuration Release --output ./packages
         dotnet pack src/CloakId.AspNetCore/CloakId.AspNetCore.csproj --no-build --configuration Release --output ./packages
         dotnet pack src/CloakId.Sqids/CloakId.Sqids.csproj --no-build --configuration Release --output ./packages
+      env:
+        VersionPrefix: ${{ steps.gitversion.outputs.majorMinorPatch }}
+        VersionSuffix: ${{ steps.gitversion.outputs.preReleaseTag }}
+        Version: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -72,6 +98,13 @@ jobs:
         name: nuget-packages
         path: ./packages/*.nupkg
         retention-days: 30
+    
+    - name: Publish to NuGet (Pre-release)
+      if: github.ref == 'refs/heads/main'
+      run: |
+        dotnet nuget push ./packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
   code-quality:
     runs-on: ubuntu-latest
