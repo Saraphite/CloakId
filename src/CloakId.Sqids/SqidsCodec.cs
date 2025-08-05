@@ -35,6 +35,7 @@ public class SqidsCodec(
 
     /// <summary>
     /// Decodes a Sqids string back to the original numeric value.
+    /// Validates that the input is the canonical encoding to prevent multiple IDs resolving to the same value.
     /// </summary>
     public object Decode(string encodedValue, Type targetType)
     {
@@ -42,16 +43,100 @@ public class SqidsCodec(
 
         try
         {
-            return actualType switch
+            object decodedValue;
+            
+            if (actualType == typeof(int))
             {
-                Type t when t == typeof(int) => intEncoder.Decode(encodedValue)[0],
-                Type t when t == typeof(uint) => uintEncoder.Decode(encodedValue)[0],
-                Type t when t == typeof(long) => longEncoder.Decode(encodedValue)[0],
-                Type t when t == typeof(ulong) => ulongEncoder.Decode(encodedValue)[0],
-                Type t when t == typeof(short) => shortEncoder.Decode(encodedValue)[0],
-                Type t when t == typeof(ushort) => ushortEncoder.Decode(encodedValue)[0],
-                _ => throw new NotSupportedException($"Type '{actualType}' is not supported for decoding.")
-            };
+                var result = intEncoder.Decode(encodedValue);
+                if (result.Count == 0)
+                    throw new ArgumentException($"Unable to decode '{encodedValue}' - invalid format.", nameof(encodedValue));
+                decodedValue = result[0];
+            }
+            else if (actualType == typeof(uint))
+            {
+                var result = uintEncoder.Decode(encodedValue);
+                if (result.Count == 0)
+                    throw new ArgumentException($"Unable to decode '{encodedValue}' - invalid format.", nameof(encodedValue));
+                decodedValue = result[0];
+            }
+            else if (actualType == typeof(long))
+            {
+                var result = longEncoder.Decode(encodedValue);
+                if (result.Count == 0)
+                    throw new ArgumentException($"Unable to decode '{encodedValue}' - invalid format.", nameof(encodedValue));
+                decodedValue = result[0];
+            }
+            else if (actualType == typeof(ulong))
+            {
+                var result = ulongEncoder.Decode(encodedValue);
+                if (result.Count == 0)
+                    throw new ArgumentException($"Unable to decode '{encodedValue}' - invalid format.", nameof(encodedValue));
+                decodedValue = result[0];
+            }
+            else if (actualType == typeof(short))
+            {
+                var result = shortEncoder.Decode(encodedValue);
+                if (result.Count == 0)
+                    throw new ArgumentException($"Unable to decode '{encodedValue}' - invalid format.", nameof(encodedValue));
+                decodedValue = result[0];
+            }
+            else if (actualType == typeof(ushort))
+            {
+                var result = ushortEncoder.Decode(encodedValue);
+                if (result.Count == 0)
+                    throw new ArgumentException($"Unable to decode '{encodedValue}' - invalid format.", nameof(encodedValue));
+                decodedValue = result[0];
+            }
+            else
+            {
+                throw new NotSupportedException($"Type '{actualType}' is not supported for decoding.");
+            }
+
+            // Validate canonical encoding - re-encode the decoded value and ensure it matches the input
+            // This prevents multiple IDs from resolving to the same value (e.g., "2fs" and "OSc" both decode to 3168)
+            string canonicalEncoding;
+            
+            if (actualType == typeof(int))
+            {
+                canonicalEncoding = intEncoder.Encode((int)decodedValue);
+            }
+            else if (actualType == typeof(uint))
+            {
+                canonicalEncoding = uintEncoder.Encode((uint)decodedValue);
+            }
+            else if (actualType == typeof(long))
+            {
+                canonicalEncoding = longEncoder.Encode((long)decodedValue);
+            }
+            else if (actualType == typeof(ulong))
+            {
+                canonicalEncoding = ulongEncoder.Encode((ulong)decodedValue);
+            }
+            else if (actualType == typeof(short))
+            {
+                canonicalEncoding = shortEncoder.Encode((short)decodedValue);
+            }
+            else if (actualType == typeof(ushort))
+            {
+                canonicalEncoding = ushortEncoder.Encode((ushort)decodedValue);
+            }
+            else
+            {
+                throw new NotSupportedException($"Type '{actualType}' is not supported for canonical validation.");
+            }
+
+            if (encodedValue != canonicalEncoding)
+            {
+                throw new ArgumentException(
+                    $"Invalid non-canonical encoding '{encodedValue}'. The canonical encoding for this value is '{canonicalEncoding}'.", 
+                    nameof(encodedValue));
+            }
+
+            return decodedValue;
+        }
+        catch (ArgumentException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
