@@ -84,11 +84,18 @@ This boundary-based approach provides **clean separation** between your client a
 
 ## Quick Start
 
-### 1. Install packages
+### 1. Install the NuGet packages
 
-```xml
-<PackageReference Include="CloakId" Version="1.0.0" />
-<PackageReference Include="CloakId.Sqids" Version="1.0.0" />
+Install the packages using Package Manager Console:
+```powershell
+Install-Package CloakId
+Install-Package CloakId.Sqids
+```
+
+Alternatively, using the .NET CLI:
+```bash
+dotnet add package CloakId
+dotnet add package CloakId.Sqids
 ```
 
 ### 2. Configure services
