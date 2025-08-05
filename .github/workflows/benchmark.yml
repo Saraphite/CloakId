@@ -1,0 +1,66 @@
+name: Benchmarks
+
+on:
+  workflow_dispatch:
+    inputs:
+      benchmark_filter:
+        description: 'Benchmark filter pattern (optional)'
+        required: false
+        default: '*'
+        type: string
+      configuration:
+        description: 'Build configuration'
+        required: false
+        default: 'Release'
+        type: choice
+        options:
+        - Release
+        - Debug
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+    
+    - name: Restore dependencies
+      run: dotnet restore CloakId.sln
+    
+    - name: Build solution
+      run: dotnet build CloakId.sln --no-restore --configuration ${{ inputs.configuration }}
+    
+    - name: Run benchmarks
+      run: |
+        cd benchmarks/CloakId.Benchmarks
+        echo "Running benchmarks with filter: ${{ inputs.benchmark_filter }}"
+        dotnet run --no-build --configuration ${{ inputs.configuration }} -- --filter ${{ inputs.benchmark_filter }}
+    
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v4
+      with:
+        name: benchmark-results-${{ github.sha }}
+        path: benchmarks/CloakId.Benchmarks/BenchmarkDotNet.Artifacts/**
+        retention-days: 30
+        if-no-files-found: warn
