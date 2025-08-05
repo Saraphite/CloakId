@@ -40,16 +40,25 @@ jobs:
     - name: Build solution
       run: dotnet build CloakId.sln --no-restore --configuration Release
     
-    - name: Run tests
-      run: dotnet test CloakId.sln --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
+    - name: Run tests with coverage
+      run: dotnet test CloakId.sln --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./TestResults
+    
+    - name: Prepare coverage reports
+      run: |
+        # Find the coverage file and copy it to a standard location
+        find ./TestResults -name "coverage.cobertura.xml" -exec cp {} ./TestResults/coverage.xml \;
+        ls -la ./TestResults/
     
     - name: Upload coverage reports
       uses: codecov/codecov-action@v4
       with:
-        directory: ./coverage
+        files: ./TestResults/coverage.xml,./TestResults/**/coverage.cobertura.xml
         flags: unittests
         name: codecov-umbrella
         fail_ci_if_error: false
+        verbose: true
+        # Tokenless upload for public repositories
+        use_oidc: true
     
     - name: Pack NuGet packages
       run: |
