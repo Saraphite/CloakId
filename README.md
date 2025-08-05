@@ -57,9 +57,8 @@ CloakId adds an important layer to your security strategy:
 
 - **Authentication or authorization** - you still need proper access controls
 - **Cryptographic security** - this is obfuscation, not encryption
-- **Protection against authorized users** - valid users can still access their permitted data
 
-**Remember**: CloakId is about making unauthorized reconnaissance significantly more difficult, not replacing fundamental security practices.
+**Remember**: CloakId adds a defense-in-depth layer to make unauthorized reconnaissance significantly more difficult - it does not replace fundamental security practices.
 
 ## How It Works
 
