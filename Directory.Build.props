@@ -20,7 +20,7 @@
     
     <!-- Assembly version properties - keep assembly version stable, use file version for builds -->
     <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
-    <FileVersion>$(Version)</FileVersion>
+    <FileVersion>$(VersionPrefix)</FileVersion>
     <InformationalVersion>$(Version)</InformationalVersion>
     
     <!-- Package version explicitly set to match assembly version -->
