@@ -71,16 +71,16 @@ jobs:
         find ./TestResults -name "coverage.cobertura.xml" -exec cp {} ./TestResults/coverage.xml \;
         ls -la ./TestResults/
     
-    - name: Upload coverage reports
-      uses: codecov/codecov-action@v4
-      with:
-        files: ./TestResults/coverage.xml,./TestResults/**/coverage.cobertura.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
-        verbose: true
-        # Tokenless upload for public repositories
-        use_oidc: true
+    # - name: Upload coverage reports
+    #   uses: codecov/codecov-action@v4
+    #   with:
+    #     files: ./TestResults/coverage.xml,./TestResults/**/coverage.cobertura.xml
+    #     flags: unittests
+    #     name: codecov-umbrella
+    #     fail_ci_if_error: false
+    #     verbose: true
+    #     # Tokenless upload for public repositories
+    #     use_oidc: true
     
     - name: Pack NuGet packages
       run: |
