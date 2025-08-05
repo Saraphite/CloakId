@@ -36,7 +36,7 @@
     <RepositoryUrl>https://github.com/Saraphite/CloakId</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIcon>icon.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/Saraphite/CloakId/main/docs/images/logo-512x512.png</PackageIconUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>id-obfuscation;sqids;encoding;asp-net-core;web-api</PackageTags>
     <PackageReleaseNotes>See https://github.com/Saraphite/CloakId/releases</PackageReleaseNotes>
@@ -53,7 +53,6 @@
 
   <ItemGroup Condition="'$(IsPackable)' != 'false'">
     <!-- Include package assets -->
-    <None Include="$(MSBuildThisFileDirectory)docs/images/logo-512x512.png" Pack="true" PackagePath="icon.png" Visible="false" />
     <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="README.md" Visible="false" />
   </ItemGroup>
 
