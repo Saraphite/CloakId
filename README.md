@@ -106,8 +106,11 @@ using CloakId.Sqids;
 using Microsoft.Extensions.DependencyInjection;
 
 var services = new ServiceCollection();
-services.AddCloakIdWithSqids(minLength: 6); // Configure Sqids encoding
-services.AddCloakId(); // Add the type info resolver
+services.AddCloakId().WithSqids(options => 
+{
+    options.MinLength = 6; // Configure minimum length
+    // options.Alphabet = "custom123456789abcdefghijk"; // Custom alphabet (optional)
+});
 
 var serviceProvider = services.BuildServiceProvider();
 ```
@@ -194,7 +197,7 @@ CloakId includes built-in support for ASP.NET Core model binding, allowing autom
 
 ```csharp
 // Enable model binding in Program.cs
-builder.Services.AddCloakIdWithSqids();
+builder.Services.AddCloakId().WithSqids();
 builder.Services.AddControllers().AddCloakIdModelBinding();
 
 // Use in controllers
@@ -240,27 +243,37 @@ The **numeric fallback metric** is particularly important for security monitorin
 
 ## Configuration Options
 
-### Sqids Configuration
+### Fluent Configuration
 
 ```csharp
-services.AddCloakIdWithSqids(
-    alphabet: "abcdefghijklmnopqrstuvwxyz0123456789", // Custom alphabet
-    minLength: 8 // Minimum length of encoded strings
-);
-```
-
-### Attribute Configuration (Future Enhancement)
-
-```csharp
-public class UserDto
+// With Sqids
+services.AddCloakId().WithSqids(options =>
 {
-    [CloakId(MinLength = 8)]
-    public int UserId { get; set; }
-    
-    [CloakId(Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
-    public long AccountId { get; set; }
-}
+    options.Alphabet = "abcdefghijklmnopqrstuvwxyz0123456789"; // Custom alphabet
+    options.MinLength = 8; // Minimum length of encoded strings
+});
+
+// With custom codec
+services.AddCloakId().WithCustomCodec<MyCustomCodec>();
+
+// With pre-registered Sqids
+services.AddCloakId().WithRegisteredSqids();
 ```
+
+### Using Pre-registered Sqids
+
+If you already have Sqids encoders registered in your DI container:
+
+```csharp
+// First register your Sqids encoders
+services.AddSingleton(new SqidsEncoder<int>(new SqidsOptions { /* your config */ }));
+// ... register other encoders
+
+// Then use the registered encoders
+services.AddCloakId().WithRegisteredSqids();
+```
+
+**Important**: You cannot call both `WithSqids()` and `WithRegisteredSqids()` on the same builder. The second call will throw an `InvalidOperationException` to prevent conflicting codec registrations.
 
 ## Custom Codecs
 
@@ -272,9 +285,24 @@ public class MyCustomCodec : ICloakIdCodec
     public string Encode(object value, Type valueType) { /* ... */ }
     public object Decode(string encodedValue, Type targetType) { /* ... */ }
 }
+```
 
-// Register your codec
-services.AddSingleton<ICloakIdCodec, MyCustomCodec>();
+### Using a Custom Codec
+
+```csharp
+// Register custom codec by type
+services.AddCloakId().WithCustomCodec<MyCustomCodec>();
+
+// Register custom codec by instance
+var myCodec = new MyCustomCodec();
+services.AddCloakId().WithCustomCodec(myCodec);
+
+// Register custom codec with factory
+services.AddCloakId().WithCustomCodec(provider => 
+{
+    var someService = provider.GetRequiredService<ISomeService>();
+    return new MyCustomCodec(someService);
+});
 ```
 
 ## Example Output

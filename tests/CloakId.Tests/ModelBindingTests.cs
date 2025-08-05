@@ -1,3 +1,4 @@
+using CloakId;
 using CloakId.Abstractions;
 using CloakId.AspNetCore;
 using CloakId.Sqids;
@@ -16,7 +17,7 @@ public class ModelBindingTests
     public ModelBindingTests()
     {
         var services = new ServiceCollection();
-        services.AddCloakIdWithSqids();
+        services.AddCloakId().WithSqids();
         var serviceProvider = services.BuildServiceProvider();
         _codec = serviceProvider.GetRequiredService<ICloakIdCodec>();
     }
@@ -123,12 +124,170 @@ public class ModelBindingTests
 
     #endregion
 
+    #region Builder Pattern Tests
+
+    [Fact]
+    public void WithSqids_AfterWithRegisteredSqids_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            services.AddCloakId()
+                .WithRegisteredSqids()
+                .WithSqids());
+
+        Assert.Contains("A codec has already been configured", exception.Message);
+    }
+
+    [Fact]
+    public void WithRegisteredSqids_AfterWithSqids_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            services.AddCloakId()
+                .WithSqids()
+                .WithRegisteredSqids());
+
+        Assert.Contains("A codec has already been configured", exception.Message);
+    }
+
+    [Fact]
+    public void WithSqids_CalledTwice_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            services.AddCloakId()
+                .WithSqids()
+                .WithSqids());
+
+        Assert.Contains("A codec has already been configured", exception.Message);
+    }
+
+    [Fact]
+    public void WithRegisteredSqids_CalledTwice_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            services.AddCloakId()
+                .WithRegisteredSqids()
+                .WithRegisteredSqids());
+
+        Assert.Contains("A codec has already been configured", exception.Message);
+    }
+
+    [Fact]
+    public void WithCustomCodec_Generic_RegistersCustomCodec()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act
+        services.AddCloakId().WithCustomCodec<TestCustomCodec>();
+
+        // Assert
+        var serviceProvider = services.BuildServiceProvider();
+        var codec = serviceProvider.GetRequiredService<ICloakIdCodec>();
+        Assert.IsType<TestCustomCodec>(codec);
+    }
+
+    [Fact]
+    public void WithCustomCodec_Instance_RegistersCustomCodec()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        var customCodec = new TestCustomCodec();
+
+        // Act
+        services.AddCloakId().WithCustomCodec(customCodec);
+
+        // Assert
+        var serviceProvider = services.BuildServiceProvider();
+        var codec = serviceProvider.GetRequiredService<ICloakIdCodec>();
+        Assert.Same(customCodec, codec);
+    }
+
+    [Fact]
+    public void WithCustomCodec_Factory_RegistersCustomCodec()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act
+        services.AddCloakId().WithCustomCodec(provider => new TestCustomCodec());
+
+        // Assert
+        var serviceProvider = services.BuildServiceProvider();
+        var codec = serviceProvider.GetRequiredService<ICloakIdCodec>();
+        Assert.IsType<TestCustomCodec>(codec);
+    }
+
+    [Fact]
+    public void WithCustomCodec_AfterWithSqids_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            services.AddCloakId()
+                .WithSqids()
+                .WithCustomCodec<TestCustomCodec>());
+
+        Assert.Contains("A codec has already been configured", exception.Message);
+    }
+
+    [Fact]
+    public void WithSqids_AfterWithCustomCodec_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            services.AddCloakId()
+                .WithCustomCodec<TestCustomCodec>()
+                .WithSqids());
+
+        Assert.Contains("A codec has already been configured", exception.Message);
+    }
+
+    #endregion
+
     #region Test Helpers
 
     private class TestMvcBuilder(IServiceCollection services) : IMvcBuilder
     {
         public IServiceCollection Services { get; } = services;
         public ApplicationPartManager PartManager { get; } = new ApplicationPartManager();
+    }
+
+    private class TestCustomCodec : ICloakIdCodec
+    {
+        public string Encode(object value, Type valueType)
+        {
+            return $"custom_{value}";
+        }
+
+        public object Decode(string encodedValue, Type targetType)
+        {
+            if (encodedValue.StartsWith("custom_") && encodedValue.Length > 7)
+            {
+                var valueString = encodedValue.Substring(7);
+                return Convert.ChangeType(valueString, targetType);
+            }
+            throw new ArgumentException("Invalid encoded value");
+        }
     }
 
     #endregion

@@ -15,8 +15,7 @@ public class CloakAttributeTests
     {
         // Set up dependency injection
         var services = new ServiceCollection();
-        services.AddCloakIdWithSqids();
-        services.AddCloakId();
+        services.AddCloakId().WithSqids();
 
         var serviceProvider = services.BuildServiceProvider();
 

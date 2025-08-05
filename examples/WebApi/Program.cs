@@ -1,10 +1,11 @@
+using CloakId;
 using CloakId.AspNetCore;
 using CloakId.Sqids;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add CloakId services with Sqids encoding and custom configuration
-builder.Services.AddCloakIdWithSqids(options =>
+builder.Services.AddCloakId().WithSqids(options =>
 {
     options.MinLength = 4; // Ensure IDs are at least 4 characters long
     // options.Alphabet = "custom123456789abcdefghijk"; // Custom alphabet example

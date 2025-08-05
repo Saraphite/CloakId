@@ -35,7 +35,7 @@ public class JsonSerializationBenchmarks
     public void Setup()
     {
         var services = new ServiceCollection();
-        services.AddCloakIdWithSqids();
+        services.AddCloakId().WithSqids();
         var serviceProvider = services.BuildServiceProvider();
         var codec = serviceProvider.GetRequiredService<ICloakIdCodec>();
 

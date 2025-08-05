@@ -20,7 +20,7 @@ public class SqidsCodecBenchmarks
     public void Setup()
     {
         var services = new ServiceCollection();
-        services.AddCloakIdWithSqids();
+        services.AddCloakId().WithSqids();
         var serviceProvider = services.BuildServiceProvider();
         _codec = serviceProvider.GetRequiredService<ICloakIdCodec>();
     }

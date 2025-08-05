@@ -1,4 +1,3 @@
-using CloakId.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CloakId;
@@ -6,19 +5,20 @@ namespace CloakId;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Adds CloakId services to the service collection.
+    /// Adds CloakId services to the service collection using a fluent builder pattern.
     /// </summary>
     /// <param name="services">The service collection to add services to.</param>
-    /// <returns>The updated service collection.</returns>
-    public static IServiceCollection AddCloakId(this IServiceCollection services)
+    /// <returns>A builder for configuring CloakId services.</returns>
+    public static ICloakIdBuilder AddCloakId(this IServiceCollection services)
     {
+        var builder = new CloakIdBuilder(services);
+        
         // Register the type info resolver for handling [Cloak] attributes
-        services.AddSingleton(provider =>
+        services.AddSingleton<CloakIdTypeInfoResolver>(serviceProvider =>
         {
-            var codec = provider.GetRequiredService<ICloakIdCodec>();
-            return new CloakIdTypeInfoResolver(codec);
+            return builder.Build(serviceProvider);
         });
 
-        return services;
+        return builder;
     }
 }

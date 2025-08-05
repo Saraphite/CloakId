@@ -17,13 +17,12 @@ Console.WriteLine("=====================================================");
 
 // Set up dependency injection with valid options
 var services = new ServiceCollection();
-services.AddCloakIdWithSqids(options =>
+services.AddCloakId().WithSqids(options =>
 {
     options.MinLength = 6; // Configure minimum length
     // You can also set a custom alphabet:
     // options.Alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
 });
-services.AddCloakId(); // Add the type info resolver
 
 var serviceProvider = services.BuildServiceProvider();
 
