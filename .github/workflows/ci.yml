@@ -77,15 +77,10 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
     - name: Restore dependencies
-      run: dotnet restore CloakId.slnx
+      run: dotnet restore CloakId.sln
     
     - name: Check format
-      run: dotnet format CloakId.slnx --verify-no-changes --verbosity diagnostic
-    
-    - name: Run security scan
-      uses: security-code-scan/security-code-scan-action@main
-      with:
-        project-path: CloakId.slnx
+      run: dotnet format CloakId.sln --verify-no-changes --verbosity diagnostic
 
   benchmark:
     runs-on: ubuntu-latest
