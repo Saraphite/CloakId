@@ -58,7 +58,7 @@ public class SqidsCodec(
             if (encodedValue != canonicalEncoding)
             {
                 throw new ArgumentException(
-                    $"Invalid non-canonical encoding '{encodedValue}'. The canonical encoding for this value is '{canonicalEncoding}'.", 
+                    $"Invalid non-canonical encoding '{encodedValue}'. The canonical encoding for this value is '{canonicalEncoding}'.",
                     nameof(encodedValue));
             }
 

@@ -12,7 +12,7 @@ public static class ServiceCollectionExtensions
     public static ICloakIdBuilder AddCloakId(this IServiceCollection services)
     {
         var builder = new CloakIdBuilder(services);
-        
+
         // Register the type info resolver for handling [Cloak] attributes
         services.AddSingleton<CloakIdTypeInfoResolver>(serviceProvider =>
         {
