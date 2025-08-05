@@ -61,6 +61,28 @@ CloakId adds an important layer to your security strategy:
 
 **Remember**: CloakId is about making unauthorized reconnaissance significantly more difficult, not replacing fundamental security practices.
 
+## How It Works
+
+CloakId provides a **completely unintrusive** solution by working **transparently at the serialization boundary**:
+
+**The Magic Happens at the Boundary:**
+- **JSON Serialization**: Automatic conversion from numbers → encoded strings
+- **JSON Deserialization**: Automatic conversion from encoded strings → numbers
+- **Model Binding**: Route parameters automatically decoded (`/users/A6das1` → `id: 12345`)
+
+This boundary-based approach provides **clean separation** between your client and server code:
+
+**On the Server Side:**
+- Your business logic works with **native numeric types** (`int`, `long`, etc.)
+- Database operations use **real numeric IDs**
+- No wrapper types, no special handling required
+- Code remains clean and type-safe
+
+**On the Client Side:**
+- APIs receive and send **encoded strings** (`"A6das1"`, `"xnF9Hu"`)
+- No knowledge of internal numeric values
+- Consistent string-based interface
+
 ## Quick Start
 
 ### 1. Install packages
