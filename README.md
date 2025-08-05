@@ -38,26 +38,6 @@ While CloakId is **not a substitute for proper security measures** like Role-Bas
 - **Without obfuscation**: Reveals total user count, active vs. deleted accounts, growth patterns
 - **With CloakId**: Each ID appears random, preventing systematic enumeration
 
-### Security Through Defense in Depth
-
-CloakId adds an important layer to your security strategy:
-
-1. **Primary Security**: RBAC, authentication, authorization (always required)
-2. **Secondary Security**: CloakId obfuscation (makes attacks harder)
-3. **Monitoring**: Track suspicious patterns in your metrics
-
-### What CloakId Prevents
-
-- **Business intelligence gathering** by competitors
-- **Growth rate analysis** through sequential ID observation  
-- **Database size estimation** via highest observed IDs
-- **Resource enumeration attacks** using predictable patterns
-
-### What CloakId Does NOT Provide
-
-- **Authentication or authorization** - you still need proper access controls
-- **Cryptographic security** - this is obfuscation, not encryption
-
 **Remember**: CloakId adds a defense-in-depth layer to make unauthorized reconnaissance significantly more difficult - it does not replace fundamental security practices.
 
 ## How It Works
