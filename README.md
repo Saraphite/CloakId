@@ -74,7 +74,6 @@ This boundary-based approach provides **clean separation** between your client a
 
 **On the Server Side:**
 - Your business logic works with **native numeric types** (`int`, `long`, etc.)
-- Database operations use **real numeric IDs**
 - No wrapper types, no special handling required
 - Code remains clean and type-safe
 
