@@ -1,3 +1,4 @@
+using System.Globalization;
 using CloakId;
 using CloakId.Abstractions;
 using CloakId.AspNetCore;
@@ -10,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-using System.Globalization;
 using Xunit;
 
 namespace CloakId.Tests;
@@ -277,10 +277,10 @@ public class ModelBindingTests
         // Arrange
         var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
         var modelBinder = new CloakIdModelBinder(_codec, options);
-        
+
         var originalValue = 12345;
         var encodedValue = _codec.Encode(originalValue, typeof(int));
-        
+
         var bindingContext = CreateModelBindingContext(typeof(int), "testId", encodedValue);
 
         // Act
@@ -298,7 +298,7 @@ public class ModelBindingTests
         // Arrange
         var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
         var modelBinder = new CloakIdModelBinder(_codec, options);
-        
+
         var bindingContext = CreateModelBindingContext(typeof(int), "testId", "12345");
 
         // Act
@@ -316,7 +316,7 @@ public class ModelBindingTests
         // Arrange
         var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = true });
         var modelBinder = new CloakIdModelBinder(_codec, options);
-        
+
         var bindingContext = CreateModelBindingContext(typeof(int), "testId", "12345");
 
         // Act
@@ -334,7 +334,7 @@ public class ModelBindingTests
         // Arrange
         var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
         var modelBinder = new CloakIdModelBinder(_codec, options);
-        
+
         var bindingContext = CreateModelBindingContext(typeof(int), "testId", "not-valid-at-all");
 
         // Act
@@ -352,7 +352,7 @@ public class ModelBindingTests
         // Arrange
         var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = true });
         var modelBinder = new CloakIdModelBinder(_codec, options);
-        
+
         var bindingContext = CreateModelBindingContext(typeof(int), "testId", "not-valid-at-all");
 
         // Act
@@ -370,7 +370,7 @@ public class ModelBindingTests
         // Arrange
         var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
         var modelBinder = new CloakIdModelBinder(_codec, options);
-        
+
         var bindingContext = CreateModelBindingContext(typeof(int), "testId", "");
 
         // Act
@@ -387,7 +387,7 @@ public class ModelBindingTests
         // Arrange
         var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
         var modelBinder = new CloakIdModelBinder(_codec, options);
-        
+
         var bindingContext = CreateModelBindingContext(typeof(int), "testId", null);
 
         // Act
@@ -404,7 +404,7 @@ public class ModelBindingTests
         // Arrange
         var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
         var modelBinder = new CloakIdModelBinder(_codec, options);
-        
+
         var bindingContext = CreateModelBindingContext(typeof(string), "testName", "some-value");
 
         // Act
@@ -424,7 +424,7 @@ public class ModelBindingTests
         // Arrange
         var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
         var modelBinder = new CloakIdModelBinder(_codec, options);
-        
+
         var bindingContext = CreateModelBindingContext(typeof(int), "testId", numericString);
 
         // Act
@@ -448,7 +448,7 @@ public class ModelBindingTests
             CultureInfo.InvariantCulture);
 
         var metadata = new EmptyModelMetadataProvider().GetMetadataForType(modelType);
-        
+
         var modelBindingContext = new DefaultModelBindingContext
         {
             ModelName = modelName,
