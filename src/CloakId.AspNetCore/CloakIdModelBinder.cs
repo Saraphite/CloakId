@@ -17,7 +17,7 @@ public class CloakIdModelBinder(ICloakIdCodec codec, IOptions<CloakIdAspNetCoreO
         var modelType = bindingContext.ModelType;
         var underlyingType = Nullable.GetUnderlyingType(modelType) ?? modelType;
 
-        // For route parameters, we need to check if this is a numeric type that could be cloaked
+        // Check if this is a numeric type that could be cloaked
         if (!IsNumericType(underlyingType)) return Task.CompletedTask;
 
         var value = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
@@ -26,6 +26,7 @@ public class CloakIdModelBinder(ICloakIdCodec codec, IOptions<CloakIdAspNetCoreO
         var stringValue = value.FirstValue;
         if (string.IsNullOrEmpty(stringValue)) return Task.CompletedTask;
 
+        // Always attempt to decode the string value first, regardless of whether it looks numeric
         try
         {
             var decodedValue = codec.Decode(stringValue, underlyingType);
@@ -36,10 +37,10 @@ public class CloakIdModelBinder(ICloakIdCodec codec, IOptions<CloakIdAspNetCoreO
             // Check if numeric fallback is allowed
             if (!options.Value.AllowNumericFallback)
             {
-                // If fallback is disabled, fail the binding with a clear error
+                // If fallback is disabled, fail the binding with a generic error
                 bindingContext.Result = ModelBindingResult.Failed();
                 bindingContext.ModelState.TryAddModelError(bindingContext.ModelName,
-                    $"Invalid encoded value '{stringValue}'. Numeric fallback is disabled.");
+                    $"The value '{stringValue}' is not valid.");
                 return Task.CompletedTask;
             }
 

@@ -2,10 +2,15 @@ using CloakId;
 using CloakId.Abstractions;
 using CloakId.AspNetCore;
 using CloakId.Sqids;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
+using System.Globalization;
 using Xunit;
 
 namespace CloakId.Tests;
@@ -260,6 +265,203 @@ public class ModelBindingTests
                 .WithSqids());
 
         Assert.Contains("A codec has already been configured", exception.Message);
+    }
+
+    #endregion
+
+    #region CloakIdModelBinder Unit Tests
+
+    [Fact]
+    public async Task BindModelAsync_ValidEncodedValue_SuccessfulBinding()
+    {
+        // Arrange
+        var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
+        var modelBinder = new CloakIdModelBinder(_codec, options);
+        
+        var originalValue = 12345;
+        var encodedValue = _codec.Encode(originalValue, typeof(int));
+        
+        var bindingContext = CreateModelBindingContext(typeof(int), "testId", encodedValue);
+
+        // Act
+        await modelBinder.BindModelAsync(bindingContext);
+
+        // Assert
+        Assert.True(bindingContext.Result.IsModelSet);
+        Assert.Equal(originalValue, bindingContext.Result.Model);
+        Assert.False(bindingContext.ModelState.ContainsKey("testId"));
+    }
+
+    [Fact]
+    public async Task BindModelAsync_NumericString_FallbackDisabled_FailsBinding()
+    {
+        // Arrange
+        var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
+        var modelBinder = new CloakIdModelBinder(_codec, options);
+        
+        var bindingContext = CreateModelBindingContext(typeof(int), "testId", "12345");
+
+        // Act
+        await modelBinder.BindModelAsync(bindingContext);
+
+        // Assert
+        Assert.True(bindingContext.Result == ModelBindingResult.Failed());
+        Assert.True(bindingContext.ModelState.ContainsKey("testId"));
+        Assert.True(bindingContext.ModelState["testId"]!.Errors.Count > 0);
+    }
+
+    [Fact]
+    public async Task BindModelAsync_NumericString_FallbackEnabled_SkipsToDefaultBinder()
+    {
+        // Arrange
+        var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = true });
+        var modelBinder = new CloakIdModelBinder(_codec, options);
+        
+        var bindingContext = CreateModelBindingContext(typeof(int), "testId", "12345");
+
+        // Act
+        await modelBinder.BindModelAsync(bindingContext);
+
+        // Assert
+        // Should not set result, allowing default model binder to handle it
+        Assert.False(bindingContext.Result.IsModelSet);
+        Assert.False(bindingContext.ModelState.ContainsKey("testId"));
+    }
+
+    [Fact]
+    public async Task BindModelAsync_InvalidString_FallbackDisabled_FailsBinding()
+    {
+        // Arrange
+        var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
+        var modelBinder = new CloakIdModelBinder(_codec, options);
+        
+        var bindingContext = CreateModelBindingContext(typeof(int), "testId", "not-valid-at-all");
+
+        // Act
+        await modelBinder.BindModelAsync(bindingContext);
+
+        // Assert
+        Assert.True(bindingContext.Result == ModelBindingResult.Failed());
+        Assert.True(bindingContext.ModelState.ContainsKey("testId"));
+        Assert.True(bindingContext.ModelState["testId"]!.Errors.Count > 0);
+    }
+
+    [Fact]
+    public async Task BindModelAsync_InvalidString_FallbackEnabled_SkipsToDefaultBinder()
+    {
+        // Arrange
+        var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = true });
+        var modelBinder = new CloakIdModelBinder(_codec, options);
+        
+        var bindingContext = CreateModelBindingContext(typeof(int), "testId", "not-valid-at-all");
+
+        // Act
+        await modelBinder.BindModelAsync(bindingContext);
+
+        // Assert
+        // Should not set result, allowing default model binder to handle it
+        Assert.False(bindingContext.Result.IsModelSet);
+        Assert.False(bindingContext.ModelState.ContainsKey("testId"));
+    }
+
+    [Fact]
+    public async Task BindModelAsync_EmptyValue_SkipsBinding()
+    {
+        // Arrange
+        var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
+        var modelBinder = new CloakIdModelBinder(_codec, options);
+        
+        var bindingContext = CreateModelBindingContext(typeof(int), "testId", "");
+
+        // Act
+        await modelBinder.BindModelAsync(bindingContext);
+
+        // Assert
+        Assert.False(bindingContext.Result.IsModelSet);
+        Assert.False(bindingContext.ModelState.ContainsKey("testId"));
+    }
+
+    [Fact]
+    public async Task BindModelAsync_NullValue_SkipsBinding()
+    {
+        // Arrange
+        var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
+        var modelBinder = new CloakIdModelBinder(_codec, options);
+        
+        var bindingContext = CreateModelBindingContext(typeof(int), "testId", null);
+
+        // Act
+        await modelBinder.BindModelAsync(bindingContext);
+
+        // Assert
+        Assert.False(bindingContext.Result.IsModelSet);
+        Assert.False(bindingContext.ModelState.ContainsKey("testId"));
+    }
+
+    [Fact]
+    public async Task BindModelAsync_NonNumericType_SkipsBinding()
+    {
+        // Arrange
+        var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
+        var modelBinder = new CloakIdModelBinder(_codec, options);
+        
+        var bindingContext = CreateModelBindingContext(typeof(string), "testName", "some-value");
+
+        // Act
+        await modelBinder.BindModelAsync(bindingContext);
+
+        // Assert
+        Assert.False(bindingContext.Result.IsModelSet);
+        Assert.False(bindingContext.ModelState.ContainsKey("testName"));
+    }
+
+    [Theory]
+    [InlineData("1")]
+    [InlineData("123")]
+    [InlineData("999999")]
+    public async Task BindModelAsync_NumericStringsAlwaysTreatedAsEncodedFirst(string numericString)
+    {
+        // Arrange
+        var options = Options.Create(new CloakIdAspNetCoreOptions { AllowNumericFallback = false });
+        var modelBinder = new CloakIdModelBinder(_codec, options);
+        
+        var bindingContext = CreateModelBindingContext(typeof(int), "testId", numericString);
+
+        // Act
+        await modelBinder.BindModelAsync(bindingContext);
+
+        // Assert
+        // Should fail because numeric strings are treated as encoded values first
+        Assert.True(bindingContext.Result == ModelBindingResult.Failed());
+        Assert.True(bindingContext.ModelState.ContainsKey("testId"));
+        Assert.True(bindingContext.ModelState["testId"]!.Errors.Count > 0);
+    }
+
+    private static DefaultModelBindingContext CreateModelBindingContext(Type modelType, string modelName, string? value)
+    {
+        var valueProvider = new QueryStringValueProvider(
+            BindingSource.Query,
+            new QueryCollection(new Dictionary<string, StringValues>
+            {
+                { modelName, value ?? string.Empty }
+            }),
+            CultureInfo.InvariantCulture);
+
+        var metadata = new EmptyModelMetadataProvider().GetMetadataForType(modelType);
+        
+        var modelBindingContext = new DefaultModelBindingContext
+        {
+            ModelName = modelName,
+            ModelMetadata = metadata,
+            ValueProvider = valueProvider,
+            ModelState = new ModelStateDictionary(),
+            ActionContext = new ActionContext
+            {
+                HttpContext = new DefaultHttpContext()
+            }
+        };
+
+        return modelBindingContext;
     }
 
     #endregion
