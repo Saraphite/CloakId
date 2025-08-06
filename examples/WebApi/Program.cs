@@ -39,6 +39,9 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "CloakId WebAPI Example v1");
         c.DocumentTitle = "CloakId WebAPI Example";
     });
+    
+    // Redirect root URL to Swagger in development
+    app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
 }
 
 app.UseHttpsRedirection();
