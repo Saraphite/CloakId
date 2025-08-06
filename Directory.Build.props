@@ -27,16 +27,16 @@
     <PackageVersion>$(Version)</PackageVersion>
     
     <!-- Package properties -->
-    <Authors>Saraphite</Authors>
-    <Company>Saraphite</Company>
+    <Authors>James Geater</Authors>
+    <Company>James Geater</Company>
     <Product>CloakId</Product>
     <Description>A .NET library for obfuscating integer IDs using configurable encoding strategies.</Description>
-    <Copyright>Copyright (c) 2025 Saraphite</Copyright>
+    <Copyright>Copyright (c) 2025 James Geater</Copyright>
     <PackageProjectUrl>https://github.com/Saraphite/CloakId</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Saraphite/CloakId</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIconUrl>https://raw.githubusercontent.com/Saraphite/CloakId/main/docs/images/logo-512x512.png</PackageIconUrl>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>id-obfuscation;sqids;encoding;asp-net-core;web-api</PackageTags>
     <PackageReleaseNotes>See https://github.com/Saraphite/CloakId/releases</PackageReleaseNotes>
@@ -53,6 +53,7 @@
 
   <ItemGroup Condition="'$(IsPackable)' != 'false'">
     <!-- Include package assets -->
+    <None Include="$(MSBuildThisFileDirectory)docs/images/logo-512x512.png" Pack="true" PackagePath="icon.png" Visible="false" />
     <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="README.md" Visible="false" />
   </ItemGroup>
 
