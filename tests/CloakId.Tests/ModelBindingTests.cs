@@ -1,5 +1,4 @@
 using System.Globalization;
-using CloakId;
 using CloakId.Abstractions;
 using CloakId.AspNetCore;
 using CloakId.Sqids;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
@@ -35,6 +33,7 @@ public class ModelBindingTests
         // Arrange
         var services = new ServiceCollection();
         services.Configure<MvcOptions>(options => { }); // Initialize MvcOptions
+        services.AddSingleton(_codec);
         var mvcBuilder = new TestMvcBuilder(services);
 
         // Act
@@ -54,6 +53,7 @@ public class ModelBindingTests
         // Arrange
         var services = new ServiceCollection();
         services.Configure<MvcOptions>(options => { });
+        services.AddSingleton(_codec);
         var mvcBuilder = new TestMvcBuilder(services);
 
         // Act
