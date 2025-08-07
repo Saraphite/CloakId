@@ -25,7 +25,7 @@ public class CloakIdTypeInfoResolver(ICloakIdCodec codec) : DefaultJsonTypeInfoR
             foreach (var propertyInfo in jsonTypeInfo.Properties)
             {
                 var propertyType = propertyInfo.PropertyType;
-                var property = type.GetProperty(propertyInfo.Name);
+                var property = type.GetProperty(propertyInfo.Name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
 
                 if (property?.GetCustomAttribute<CloakAttribute>() != null &&
                     IsNumericType(propertyType))

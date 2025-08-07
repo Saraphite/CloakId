@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization.Metadata;
+using CloakId.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -48,6 +50,18 @@ public static class MvcBuilderExtensions
         builder.Services.Configure<MvcOptions>(options =>
         {
             options.ModelBinderProviders.Insert(0, new CloakIdModelBinderProvider());
+        });
+
+        // We have to build the service provider to resolve the codec. There must be a better way.
+        var codec = builder.Services.BuildServiceProvider().GetRequiredService<ICloakIdCodec>();
+
+        builder.Services.Configure<JsonOptions>(options =>
+        {
+            // Use the CloakIdTypeInfoResolver to handle [Cloak] attributes in JSON serialization
+            options.JsonSerializerOptions.TypeInfoResolver = JsonTypeInfoResolver.Combine(
+                new CloakIdTypeInfoResolver(codec),
+                options.JsonSerializerOptions.TypeInfoResolver
+            );
         });
 
         return builder;

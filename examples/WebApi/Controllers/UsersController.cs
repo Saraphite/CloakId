@@ -1,132 +1,160 @@
 using CloakId;
-using CloakId.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController(ICloakIdCodec codec) : ControllerBase
+public class UsersController : ControllerBase
 {
+    // Simulated in-memory data store
+    private static readonly List<UserDto> _users =
+    [
+        new UserDto { Id = 1, Name = "John Doe", Email = "john@example.com", CreatedAt = DateTime.UtcNow.AddDays(-30) },
+        new UserDto { Id = 2, Name = "Jane Smith", Email = "jane@example.com", CreatedAt = DateTime.UtcNow.AddDays(-15) },
+        new UserDto { Id = 3, Name = "Bob Johnson", Email = "bob@example.com", CreatedAt = DateTime.UtcNow.AddDays(-7) }
+    ];
 
     /// <summary>
-    /// Example 1: Manual conversion approach
-    /// Route: GET api/users/manual/rs (where "rs" is an encoded ID for user 33)
+    /// GET /api/users - Get all users
     /// </summary>
-    [HttpGet("manual/{encodedId}")]
-    public IActionResult GetUserManual(string encodedId)
+    /// <returns>List of all users with encoded IDs (via JSON serialization)</returns>
+    [HttpGet]
+    public IActionResult GetAllUsers()
     {
-        try
+        return Ok(_users);
+    }
+
+    /// <summary>
+    /// GET /api/users/{id} - Get a specific user by encoded ID
+    /// The [Cloak] attribute automatically decodes the string ID to an integer
+    /// </summary>
+    /// <param name="id">The encoded user ID (e.g., "aB3" instead of "1")</param>
+    /// <returns>User details if found</returns>
+    [HttpGet("{id}")]
+    public IActionResult GetUser([Cloak] int id)
+    {
+        var user = _users.FirstOrDefault(u => u.Id == id);
+
+        if (user == null)
         {
-            var userId = (int)codec.Decode(encodedId, typeof(int));
-            return Ok(new
-            {
-                Method = "Manual conversion",
-                UserId = userId,
-                EncodedId = encodedId,
-                Message = $"Successfully decoded '{encodedId}' to user ID {userId}"
-            });
+            return NotFound(new { Message = $"User with ID {id} not found" });
         }
-        catch (ArgumentException)
-        {
-            return BadRequest($"Invalid user ID: {encodedId}");
-        }
+
+        return Ok(user);
     }
 
     /// <summary>
-    /// Example 2: Automatic conversion with model binder
-    /// Route: GET api/users/auto/rs (where "rs" is an encoded ID for user 33)
-    /// The [Cloak] attribute tells the model binder to automatically convert the string
+    /// POST /api/users - Create a new user
     /// </summary>
-    [HttpGet("auto/{id}")]
-    public IActionResult GetUserAuto([Cloak] int id)
-    {
-        return Ok(new
-        {
-            Method = "Automatic conversion (model binder)",
-            UserId = id,
-            EncodedId = codec.Encode(id, typeof(int)),
-            Message = $"Parameter automatically converted to user ID {id}"
-        });
-    }
-
-    /// <summary>
-    /// Example 3: Multiple encoded parameters
-    /// Route: GET api/users/rs/posts/PQ (where "rs" = user 33, "PQ" = post 20)
-    /// </summary>
-    [HttpGet("{userId}/posts/{postId}")]
-    public IActionResult GetUserPost([Cloak] int userId, [Cloak] long postId)
-    {
-        return Ok(new
-        {
-            Method = "Multiple automatic conversions",
-            UserId = userId,
-            PostId = postId,
-            EncodedUserId = codec.Encode(userId, typeof(int)),
-            EncodedPostId = codec.Encode(postId, typeof(long)),
-            Message = $"User {userId} viewing post {postId}"
-        });
-    }
-
-    /// <summary>
-    /// Example 4: Fallback - works with both encoded strings and regular numbers
-    /// Route: GET api/users/fallback/rs or GET api/users/fallback/33
-    /// Note: Numeric values work because the model binder falls back to default parsing if decoding fails
-    /// </summary>
-    [HttpGet("fallback/{id}")]
-    public IActionResult GetUserFallback([Cloak] int id)
-    {
-        // This works because the model binder falls back to default binding
-        // if the string can't be decoded as a CloakId
-        return Ok(new
-        {
-            Method = "Fallback (works with encoded or numeric)",
-            UserId = id,
-            EncodedId = codec.Encode(id, typeof(int)),
-            Message = $"Retrieved user {id} (supports both encoded strings and regular numbers)"
-        });
-    }
-
-    /// <summary>
-    /// Example 5: Create a user and return both numeric and encoded IDs
-    /// Route: POST api/users
-    /// </summary>
+    /// <param name="request">User creation data</param>
+    /// <returns>Created user with encoded ID (via JSON serialization)</returns>
     [HttpPost]
     public IActionResult CreateUser([FromBody] CreateUserRequest request)
     {
-        // Simulate creating a user and getting a new ID
-        var newUserId = Random.Shared.Next(1000, 9999);
-        var encodedId = codec.Encode(newUserId, typeof(int));
+        // Validate request
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            return BadRequest(new { Message = "Name is required" });
+        }
 
-        return CreatedAtAction(
-            nameof(GetUserAuto),
-            new { id = encodedId },
-            new
-            {
-                UserId = newUserId,
-                EncodedId = encodedId,
-                request.Name,
-                Message = $"User created with ID {newUserId} (encoded as {encodedId})"
-            });
+        if (string.IsNullOrWhiteSpace(request.Email))
+        {
+            return BadRequest(new { Message = "Email is required" });
+        }
+
+        // Check if email already exists
+        if (_users.Any(u => u.Email.Equals(request.Email, StringComparison.OrdinalIgnoreCase)))
+        {
+            return Conflict(new { Message = "A user with this email already exists" });
+        }
+
+        // Create new user
+        var newUser = new UserDto
+        {
+            Id = _users.Max(u => u.Id) + 1, // Simple ID generation
+            Name = request.Name,
+            Email = request.Email,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _users.Add(newUser);
+
+        return Created("/api/users/" + newUser.Id, newUser);
     }
 
     /// <summary>
-    /// Example 6: Strict encoded-only endpoint (when AllowNumericFallback = false)
-    /// Route: GET api/users/strict/rs (only accepts encoded strings like "rs")
-    /// This endpoint will return 400 Bad Request if you try: GET api/users/strict/33
-    /// Note: The behavior depends on the AllowNumericFallback configuration in Program.cs
+    /// PUT /api/users/{id} - Update an existing user
     /// </summary>
-    [HttpGet("strict/{id}")]
-    public IActionResult GetUserStrict([Cloak] int id)
+    /// <param name="id">The encoded user ID</param>
+    /// <param name="request">Updated user data</param>
+    /// <returns>Updated user details</returns>
+    [HttpPut("{id}")]
+    public IActionResult UpdateUser([Cloak] int id, [FromBody] UpdateUserRequest request)
     {
-        return Ok(new
+        var user = _users.FirstOrDefault(u => u.Id == id);
+
+        if (user == null)
         {
-            Method = "Strict encoded-only (respects AllowNumericFallback setting)",
-            UserId = id,
-            EncodedId = codec.Encode(id, typeof(int)),
-            Message = $"Retrieved user {id} - this endpoint behavior depends on AllowNumericFallback setting"
-        });
+            return NotFound(new { Message = $"User with ID {id} not found" });
+        }
+
+        // Validate request
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            return BadRequest(new { Message = "Name is required" });
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Email))
+        {
+            return BadRequest(new { Message = "Email is required" });
+        }
+
+        // Check if email already exists for another user
+        if (_users.Any(u => u.Id != id && u.Email.Equals(request.Email, StringComparison.OrdinalIgnoreCase)))
+        {
+            return Conflict(new { Message = "A user with this email already exists" });
+        }
+
+        // Update user
+        user.Name = request.Name;
+        user.Email = request.Email;
+
+        return Ok(user);
+    }
+
+    /// <summary>
+    /// DELETE /api/users/{id} - Delete a user
+    /// </summary>
+    /// <param name="id">The encoded user ID</param>
+    /// <returns>Confirmation of deletion</returns>
+    [HttpDelete("{id}")]
+    public IActionResult DeleteUser([Cloak] int id)
+    {
+        var user = _users.FirstOrDefault(u => u.Id == id);
+
+        if (user == null)
+        {
+            return NotFound(new { Message = $"User with ID {id} not found" });
+        }
+
+        _users.Remove(user);
+
+        return Ok(user);
     }
 }
 
-public record CreateUserRequest(string Name);
+// DTOs and Request Models
+public class UserDto
+{
+    [Cloak] // This will automatically encode the ID in JSON responses
+    public int Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
+}
+
+public record CreateUserRequest(string Name, string Email);
+
+public record UpdateUserRequest(string Name, string Email);
