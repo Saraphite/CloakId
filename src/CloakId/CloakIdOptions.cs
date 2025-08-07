@@ -26,7 +26,9 @@ public class CloakIdOptions
     /// <summary>
     /// Gets or sets the custom alphabet/character set for ID encoding.
     /// If null, the default alphabet for the specific implementation will be used.
-    /// Most implementations support customizing the characters used in encoded IDs.
+    /// Only alphanumeric characters (A-Z, a-z, 0-9) are allowed to ensure
+    /// generated IDs work reliably across all web frameworks, routing systems,
+    /// file systems, and network infrastructure without encoding issues.
     /// </summary>
     public string? Alphabet
     {
@@ -68,5 +70,29 @@ public class CloakIdOptions
             if (char.IsWhiteSpace(c))
                 throw new ArgumentException($"Alphabet contains whitespace character at position {alphabet.IndexOf(c)}. Whitespace characters are not allowed.", nameof(alphabet));
         }
+
+        // Check for URL-unsafe characters
+        foreach (char c in alphabet)
+        {
+            if (!IsUrlSafeCharacter(c))
+                throw new ArgumentException($"Alphabet contains unsafe character '{c}' at position {alphabet.IndexOf(c)}. Only alphanumeric characters (A-Z, a-z, 0-9) are allowed to ensure compatibility with web frameworks and routing.", nameof(alphabet));
+        }
+    }
+
+    /// <summary>
+    /// Determines if a character is URL-safe and suitable for use in route parameters.
+    /// For maximum compatibility with web frameworks, reverse proxies, and file systems,
+    /// only alphanumeric characters are considered safe.
+    /// </summary>
+    /// <param name="c">The character to check.</param>
+    /// <returns>True if the character is safe for use in IDs, false otherwise.</returns>
+    private static bool IsUrlSafeCharacter(char c)
+    {
+        // Only allow alphanumeric characters for maximum compatibility
+        // Excludes -, ., _, ~ to avoid issues with:
+        // - File extension parsing (periods)
+        // - Path interpretation (tildes in ASP.NET Core)  
+        // - Various framework-specific parsing edge cases
+        return char.IsLetterOrDigit(c);
     }
 }

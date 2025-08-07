@@ -71,7 +71,7 @@ public class CloakIdOptionsTests
     [InlineData("abc")]
     [InlineData("abcdefghijklmnopqrstuvwxyz")]
     [InlineData("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")]
-    [InlineData("!@#$%^&*()")]
+    [InlineData("abc123DEF")]
     public void Alphabet_ValidAlphabets_ShouldSetSuccessfully(string validAlphabet)
     {
         // Arrange
@@ -141,6 +141,31 @@ public class CloakIdOptionsTests
         Assert.Contains("Alphabet contains whitespace character", exception.Message);
     }
 
+    [Theory]
+    [InlineData("!@#$%^&*()")]
+    [InlineData("badtoken+")]
+    [InlineData("badtoken=")]
+    [InlineData("badtoken/")]
+    [InlineData("badtoken?")]
+    [InlineData("badtoken[")]
+    [InlineData("badtoken]")]
+    [InlineData("badtoken{")]
+    [InlineData("badtoken}")]
+    [InlineData("badtoken%20")]
+    [InlineData("badtoken-")]
+    [InlineData("badtoken.")]
+    [InlineData("badtoken_")]
+    [InlineData("badtoken~")]
+    public void Alphabet_WithUnsafeCharacters_ShouldThrowArgumentException(string unsafeAlphabet)
+    {
+        // Arrange
+        var options = new CloakIdOptions();
+
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentException>(() => options.Alphabet = unsafeAlphabet);
+        Assert.Contains("unsafe character", exception.Message);
+    }
+
     [Fact]
     public void Alphabet_SquidsDefaultAlphabet_ShouldSetSuccessfully()
     {
@@ -151,6 +176,19 @@ public class CloakIdOptionsTests
         // Act & Assert
         options.Alphabet = sqidsDefaultAlphabet;
         Assert.Equal(sqidsDefaultAlphabet, options.Alphabet);
+    }
+
+    [Fact]
+    public void Alphabet_AllSafeCharacters_ShouldSetSuccessfully()
+    {
+        // Arrange
+        var options = new CloakIdOptions();
+        // Test all safe characters: letters and digits only
+        const string safeAlphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        // Act & Assert
+        options.Alphabet = safeAlphabet;
+        Assert.Equal(safeAlphabet, options.Alphabet);
     }
 
     [Fact]
