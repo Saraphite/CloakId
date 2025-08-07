@@ -105,6 +105,13 @@ jobs:
         dotnet nuget push ./packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+    
+    - name: Publish to GitHub Packages (Pre-release)
+      if: github.ref == 'refs/heads/main'
+      run: |
+        dotnet nuget push ./packages/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/Saraphite/index.json --skip-duplicate
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   code-quality:
     runs-on: ubuntu-latest
