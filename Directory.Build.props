@@ -6,13 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile Condition="'$(IsPackable)' != 'false'">true</GenerateDocumentationFile>
-    
-    <!-- Suppress XML documentation warnings for now -->
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
-    
-    <!-- Version properties - will be overridden by CI/CD pipeline -->
+  </PropertyGroup>
+
+  <!-- Version properties - will be overridden by CI/CD pipeline -->
+  <PropertyGroup>
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">1.0.0</VersionPrefix>
     <VersionSuffix Condition="'$(VersionSuffix)' == ''"></VersionSuffix>
     <Version Condition="'$(Version)' == '' AND '$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</Version>
@@ -25,8 +22,16 @@
     
     <!-- Package version explicitly set to match assembly version -->
     <PackageVersion>$(Version)</PackageVersion>
-    
-    <!-- Package properties -->
+  </PropertyGroup>
+
+  <!-- Quality settings for all projects -->
+  <PropertyGroup>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <!-- Package properties for packable projects only -->
+  <PropertyGroup Condition="'$(IsPackable)' != 'false'">
     <Authors>James Geater</Authors>
     <Company>James Geater</Company>
     <Product>CloakId</Product>

@@ -9,6 +9,11 @@ namespace CloakId.AspNetCore;
 /// </summary>
 public class CloakIdModelBinder(ICloakIdCodec codec, IOptions<CloakIdAspNetCoreOptions> options) : IModelBinder
 {
+    /// <summary>
+    /// Attempts to bind the model by decoding CloakId-encoded string values to their numeric representations.
+    /// </summary>
+    /// <param name="bindingContext">The context for the model binding operation.</param>
+    /// <returns>A task representing the asynchronous binding operation.</returns>
     public Task BindModelAsync(ModelBindingContext bindingContext)
     {
         ArgumentNullException.ThrowIfNull(bindingContext);

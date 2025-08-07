@@ -10,6 +10,12 @@ namespace CloakId;
 /// </summary>
 public class CloakIdTypeInfoResolver(ICloakIdCodec codec) : DefaultJsonTypeInfoResolver
 {
+    /// <summary>
+    /// Gets the type information for the specified type, adding CloakId custom converters for properties marked with [Cloak].
+    /// </summary>
+    /// <param name="type">The type to get information for.</param>
+    /// <param name="options">The JSON serializer options.</param>
+    /// <returns>The JSON type information with CloakId converters applied where appropriate.</returns>
     public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
     {
         var jsonTypeInfo = base.GetTypeInfo(type, options);

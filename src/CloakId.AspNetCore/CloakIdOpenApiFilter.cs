@@ -11,6 +11,11 @@ namespace CloakId.AspNetCore;
 /// </summary>
 public class CloakIdOpenApiFilter : IOperationFilter
 {
+    /// <summary>
+    /// Applies the CloakId parameter transformations to the OpenAPI operation specification.
+    /// </summary>
+    /// <param name="operation">The OpenAPI operation to modify.</param>
+    /// <param name="context">The operation filter context containing method information.</param>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         if (operation.Parameters == null) return;

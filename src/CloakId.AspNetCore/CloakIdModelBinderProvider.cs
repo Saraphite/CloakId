@@ -11,6 +11,11 @@ namespace CloakId.AspNetCore;
 /// </summary>
 public class CloakIdModelBinderProvider : IModelBinderProvider
 {
+    /// <summary>
+    /// Gets the appropriate model binder for the specified context, returning a CloakIdModelBinder for numeric types.
+    /// </summary>
+    /// <param name="context">The model binder provider context.</param>
+    /// <returns>A CloakIdModelBinder for numeric types, or null for other types.</returns>
     public IModelBinder? GetBinder(ModelBinderProviderContext context)
     {
         ArgumentNullException.ThrowIfNull(context);

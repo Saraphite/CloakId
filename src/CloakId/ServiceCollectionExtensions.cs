@@ -2,6 +2,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CloakId;
 
+/// <summary>
+/// Extension methods for <see cref="IServiceCollection"/> to configure CloakId services.
+/// </summary>
 public static class ServiceCollectionExtensions
 {
     /// <summary>

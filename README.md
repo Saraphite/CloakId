@@ -19,7 +19,7 @@ A .NET library that provides automatic encoding/decoding of numeric properties t
 
 ## Why This Library is Useful
 
-While CloakId is **not a substitute for proper security measures** like Role-Based Access Control (RBAC), authentication, and authorization, it provides valuable protection against information disclosure and business intelligence gathering.
+While CloakId is **not a substitute for proper security measures** like authentication, authorization, and access control, it provides valuable protection against information disclosure and business intelligence gathering.
 
 ### Business Intelligence Protection
 
