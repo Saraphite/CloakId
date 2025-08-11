@@ -28,12 +28,12 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
     - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v1.1.1
+      uses: gittools/actions/gitversion/setup@v4.1.0
       with:
         versionSpec: '5.x'
     
     - name: Determine Version
-      uses: gittools/actions/gitversion/execute@v1.1.1
+      uses: gittools/actions/gitversion/execute@v4.1.0
       id: gitversion
       with:
         useConfigFile: true
