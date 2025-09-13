@@ -32,63 +32,89 @@ static void TestValidation()
     try
     {
         var options1 = new CloakIdOptions { MinLength = 5 };
-        Console.WriteLine($"  ✓ Valid MinLength = {options1.MinLength}");
+        WritePass($"Valid MinLength = {options1.MinLength}");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"  ✗ Error: {ex.Message}");
+        WriteFail($"Error: {ex.Message}");
     }
 
     try
     {
         var options2 = new CloakIdOptions { MinLength = -1 };
-        Console.WriteLine($"  ✓ Invalid MinLength accepted: {options2.MinLength}");
+        WriteFail($"Invalid MinLength accepted: {options2.MinLength}");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"  ✓ Validation caught invalid MinLength: {ex.Message}");
+        WritePass($"Validation caught invalid MinLength: {ex.Message}");
     }
 
     Console.WriteLine("\nTesting Alphabet validation:");
     try
     {
         var options3 = new CloakIdOptions { Alphabet = "abcdefghijklmnopqrstuvwxyz" };
-        Console.WriteLine($"  ✓ Valid alphabet accepted");
+        WritePass("Valid alphabet accepted");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"  ✗ Error with valid alphabet: {ex.Message}");
+        WriteFail($"Error with valid alphabet: {ex.Message}");
     }
 
     try
     {
         var options4 = new CloakIdOptions { Alphabet = "ab" };
-        Console.WriteLine($"  ✗ Short alphabet accepted");
+        WriteFail("Short alphabet accepted");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"  ✓ Validation caught short alphabet: {ex.Message}");
+        WritePass($"Validation caught short alphabet: {ex.Message}");
     }
 
     try
     {
         var options5 = new CloakIdOptions { Alphabet = "aab" };
-        Console.WriteLine($"  ✗ Duplicate characters accepted");
+        WriteFail("Duplicate characters accepted");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"  ✓ Validation caught duplicates: {ex.Message}");
+        WritePass($"Validation caught duplicates: {ex.Message}");
     }
 
     try
     {
         var options6 = new CloakIdOptions { Alphabet = "ab c" };
-        Console.WriteLine($"  ✗ Whitespace characters accepted");
+        WriteFail("Whitespace characters accepted");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"  ✓ Validation caught whitespace: {ex.Message}");
+        WritePass($"Validation caught whitespace: {ex.Message}");
     }
+
+    try
+    {
+        var options7 = new CloakIdOptions { Alphabet = "abc-def" };
+        WriteFail("Special characters accepted");
+    }
+    catch (Exception ex)
+    {
+        WritePass($"Validation caught special characters: {ex.Message}");
+    }
+}
+
+static void WritePass(string message)
+{
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.Write("  PASS ");
+    Console.ResetColor();
+    Console.WriteLine(message);
+}
+
+static void WriteFail(string message)
+{
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.Write("  FAIL ");
+    Console.ResetColor();
+    Console.WriteLine(message);
 }
 
 // Get the type info resolver
