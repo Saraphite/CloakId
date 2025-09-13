@@ -88,7 +88,7 @@ var services = new ServiceCollection();
 services.AddCloakId().WithSqids(options => 
 {
     options.MinLength = 6; // Configure minimum length
-    // options.Alphabet = "custom123456789abcdefghijk"; // Custom alphabet (optional)
+    // options.Alphabet = "custom123456789abdefghijk"; // Custom alphabet (optional)
 });
 
 var serviceProvider = services.BuildServiceProvider();
