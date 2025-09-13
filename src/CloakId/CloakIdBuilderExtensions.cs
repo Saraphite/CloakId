@@ -67,7 +67,7 @@ public static class CloakIdBuilderExtensions
         }
 
         // Register the custom codec instance as the ICloakIdCodec
-        builder.Services.AddSingleton<ICloakIdCodec>(codecInstance);
+        builder.Services.AddSingleton(codecInstance);
 
         // Mark codec as configured
         builder.MarkCodecConfigured();
@@ -98,7 +98,7 @@ public static class CloakIdBuilderExtensions
         }
 
         // Register the custom codec factory as the ICloakIdCodec
-        builder.Services.AddSingleton<ICloakIdCodec>(codecFactory);
+        builder.Services.AddSingleton(codecFactory);
 
         // Mark codec as configured
         builder.MarkCodecConfigured();

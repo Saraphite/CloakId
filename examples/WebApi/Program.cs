@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCloakId().WithSqids(options =>
 {
     options.MinLength = 4; // Ensure IDs are at least 4 characters long
-    // options.Alphabet = "custom123456789abcdefghijk"; // Custom alphabet example
+    // options.Alphabet = "custom123456789abdefghijk"; // Custom alphabet example
 });
 
 // Add controllers with CloakId ASP.NET Core integration (model binding)

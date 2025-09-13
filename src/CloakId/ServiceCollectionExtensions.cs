@@ -17,10 +17,7 @@ public static class ServiceCollectionExtensions
         var builder = new CloakIdBuilder(services);
 
         // Register the type info resolver for handling [Cloak] attributes
-        services.AddSingleton<CloakIdTypeInfoResolver>(serviceProvider =>
-        {
-            return builder.Build(serviceProvider);
-        });
+        services.AddSingleton(builder.Build);
 
         return builder;
     }
