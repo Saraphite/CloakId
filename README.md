@@ -34,8 +34,8 @@ While CloakId is **not a substitute for proper security measures** like authenti
 - **With CloakId**: They see IDs like `A6das1` and `xnF9Hu` - no business intelligence can be extracted
 
 **Resource Enumeration**:
-- Attackers often probe sequential IDs to map your system: `/api/users/1`, `/api/users/2`, etc.
-- **Without obfuscation**: Reveals total user count, active vs. deleted accounts, growth patterns
+- Attackers often probe sequential IDs to map your system: `/api/posts/1`, `/api/posts/2`, etc.
+- **Without obfuscation**: Reveals total post count, posting activity patterns, system growth rates
 - **With CloakId**: Each ID appears random, preventing systematic enumeration
 
 **Remember**: CloakId adds a defense-in-depth layer to make unauthorized reconnaissance significantly more difficult - it does not replace fundamental security practices.
