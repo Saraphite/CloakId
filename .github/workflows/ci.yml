@@ -93,7 +93,7 @@ jobs:
         Version: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
     
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: nuget-packages
         path: ./packages/*.nupkg
