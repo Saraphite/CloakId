@@ -53,17 +53,17 @@ jobs:
           ${{ runner.os }}-nuget-
     
     - name: Restore dependencies
-      run: dotnet restore CloakId.sln
+      run: dotnet restore CloakId.slnx
     
     - name: Build solution
-      run: dotnet build CloakId.sln --no-restore --configuration Release
+      run: dotnet build CloakId.slnx --no-restore --configuration Release
       env:
         VersionPrefix: ${{ steps.gitversion.outputs.majorMinorPatch }}
         VersionSuffix: ${{ steps.gitversion.outputs.preReleaseTag }}
         Version: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
     
     - name: Run tests with coverage
-      run: dotnet test CloakId.sln --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./TestResults
+      run: dotnet test CloakId.slnx --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./TestResults
     
     - name: Prepare coverage reports
       run: |
@@ -126,7 +126,7 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
     - name: Restore dependencies
-      run: dotnet restore CloakId.sln
+      run: dotnet restore CloakId.slnx
     
     - name: Check format
-      run: dotnet format CloakId.sln --verify-no-changes --verbosity diagnostic
+      run: dotnet format CloakId.slnx --verify-no-changes --verbosity diagnostic
