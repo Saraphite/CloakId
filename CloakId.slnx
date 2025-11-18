@@ -1,8 +1,11 @@
 <Solution>
   <Configurations>
-    <Platform Name="Any CPU" />
-    <Platform Name="x64" />
-    <Platform Name="x86" />
+    <Configuration Name="Debug" Platform="Any CPU" />
+    <Configuration Name="Release" Platform="Any CPU" />
+    <Configuration Name="Debug" Platform="x64" />
+    <Configuration Name="Release" Platform="x64" />
+    <Configuration Name="Debug" Platform="x86" />
+    <Configuration Name="Release" Platform="x86" />
   </Configurations>
   <Folder Name="/benchmarks/">
     <Project Path="benchmarks/CloakId.Benchmarks/CloakId.Benchmarks.csproj" />
