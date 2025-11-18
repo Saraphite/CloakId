@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>CloakId</AssemblyName>
     <PackageId>CloakId</PackageId>
     <Description>Core library for obfuscating integer IDs with configurable encoding strategies and JSON serialization support.</Description>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

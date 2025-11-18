@@ -4,6 +4,7 @@
     <AssemblyName>CloakId.Sqids</AssemblyName>
     <PackageId>CloakId.Sqids</PackageId>
     <Description>Sqids implementation for CloakId - provides URL-safe, configurable ID obfuscation using the Sqids algorithm.</Description>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

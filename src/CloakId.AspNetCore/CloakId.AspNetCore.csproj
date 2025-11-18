@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>CloakId.AspNetCore</AssemblyName>
     <PackageId>CloakId.AspNetCore</PackageId>
     <Description>ASP.NET Core integration for CloakId - includes model binding, OpenAPI/Swagger support, and metrics for obfuscated IDs.</Description>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
