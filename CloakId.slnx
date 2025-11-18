@@ -1,0 +1,25 @@
+<Solution>
+  <Configurations>
+    <Configuration Name="Debug" Platform="Any CPU" />
+    <Configuration Name="Release" Platform="Any CPU" />
+    <Configuration Name="Debug" Platform="x64" />
+    <Configuration Name="Release" Platform="x64" />
+    <Configuration Name="Debug" Platform="x86" />
+    <Configuration Name="Release" Platform="x86" />
+  </Configurations>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/CloakId.Benchmarks/CloakId.Benchmarks.csproj" />
+  </Folder>
+  <Folder Name="/examples/">
+    <Project Path="examples/AttributeBasedUsage/AttributeBasedUsage.csproj" />
+    <Project Path="examples/WebApi/WebApi.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/CloakId.AspNetCore/CloakId.AspNetCore.csproj" />
+    <Project Path="src/CloakId.Sqids/CloakId.Sqids.csproj" />
+    <Project Path="src/CloakId/CloakId.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CloakId.Tests/CloakId.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -45,17 +45,17 @@ jobs:
         echo "Tag Name: ${{ github.ref_name }}"
     
     - name: Restore dependencies
-      run: dotnet restore CloakId.sln
+      run: dotnet restore CloakId.slnx
     
     - name: Build solution
-      run: dotnet build CloakId.sln --no-restore --configuration Release
+      run: dotnet build CloakId.slnx --no-restore --configuration Release
       env:
         VersionPrefix: ${{ steps.gitversion.outputs.majorMinorPatch }}
         VersionSuffix: ${{ steps.gitversion.outputs.preReleaseTag }}
         Version: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
     
     - name: Run tests
-      run: dotnet test CloakId.sln --no-build --configuration Release --verbosity normal
+      run: dotnet test CloakId.slnx --no-build --configuration Release --verbosity normal
     
     - name: Pack NuGet packages
       run: |

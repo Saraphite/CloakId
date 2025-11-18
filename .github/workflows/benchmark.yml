@@ -46,10 +46,10 @@ jobs:
           ${{ runner.os }}-nuget-
     
     - name: Restore dependencies
-      run: dotnet restore CloakId.sln
+      run: dotnet restore CloakId.slnx
     
     - name: Build solution
-      run: dotnet build CloakId.sln --no-restore --configuration ${{ inputs.configuration }}
+      run: dotnet build CloakId.slnx --no-restore --configuration ${{ inputs.configuration }}
     
     - name: Run benchmarks
       run: |
